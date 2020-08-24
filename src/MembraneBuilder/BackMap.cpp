@@ -175,20 +175,32 @@ BackMap::BackMap(Argument *pArgu)
     // Here, we try to remove the points that are covered by the proteins. Since the lipid will be placed with Pcc=A/Ap; setting A=0 make it removed
     for ( std::vector<point*>::iterator it = m_point1.begin(); it != m_point1.end(); it++ )
     {
-        Vec3D Pos = (*it)->GetPos();
-        if(GCNT.anythingaround(Pos)==true)
-            (*it)->UpdateArea(0);
+        bool rem = false;
+        Vec3D Pos1 = (*it)->GetPos();
+        Vec3D N =   (*it)->GetNormal();
+        Vec3D Pos2 = Pos1 - N*1.5;
+        rem = GCNT.anythingaround(Pos1);  //121945
+        if(rem==false)
+        rem = GCNT.anythingaround(Pos2);
+        if(rem==true)
+        (*it)->UpdateArea(0);
         else
         p1.push_back(*it);
     }
     if(m_monolayer == false)
     for ( std::vector<point*>::iterator it = m_point2.begin(); it != m_point2.end(); it++ )
     {
-        Vec3D Pos = (*it)->GetPos();
-        if(GCNT.anythingaround(Pos)==true)
-            (*it)->UpdateArea(0);
+        bool rem = false;
+        Vec3D Pos1 = (*it)->GetPos();
+        Vec3D N =   (*it)->GetNormal();
+        Vec3D Pos2 = Pos1 - N*1.5;
+        rem = GCNT.anythingaround(Pos1);  //121945
+        if(rem==false)
+        rem = GCNT.anythingaround(Pos2);
+        if(rem==true)
+        (*it)->UpdateArea(0);
         else
-        p2.push_back(*it);
+        p1.push_back(*it);
     }
     
     // Make all the domain containing different lipids
@@ -284,8 +296,7 @@ BackMap::BackMap(Argument *pArgu)
             double prob=area/(LL->Ap);
            // std::cout<<DL.size()<<"  "<<LL->Ap<<"We 2222get here \n";
 
-           // if(prob>rn &&
-            if(LL->MaxNo>NoMadeLipid)
+            if(prob>rn && LL->MaxNo>NoMadeLipid)
             {
                 madetotallipids++;
                 NoMadeLipid++;

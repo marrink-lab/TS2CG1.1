@@ -43,7 +43,7 @@ GenDomains::GenDomains(std::string strfilename, std::vector<point*>  point1,std:
 
     if(Line.size()!=0 && (Line.at(0)).at(0)!=';')
     {
-        if((Line.at(0)).at(0)=='[' && flag==false)
+        if((Line.at(0)).at(0)=='[' )
         {
             str = f.trim(str);
             str.erase(std::remove(str.begin(), str.end(), '['), str.end());
@@ -115,7 +115,7 @@ GenDomains::GenDomains(std::string strfilename, std::vector<point*>  point1,std:
             }
             else
             {
-                std::cout<<"  "<<str<<" Error 232----GENDOMAIN: \n";
+                std::cout<<" Error 232----GENDOMAIN:   "<<flag<<"  "<<str<<"\n";
 
             }
 

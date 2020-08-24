@@ -10,7 +10,7 @@ GenerateUnitCells::GenerateUnitCells(std::vector< bead* > bead,Argument *pArgu,V
     m_pAllBead=bead;
     m_pArgu=pArgu;
      m_CNTSize=1.0;
-    m_Cutoff = cuttoff;
+    m_Cutoff = cuttoff*cuttoff;
 }
 
 
