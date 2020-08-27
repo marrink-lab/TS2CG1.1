@@ -200,7 +200,7 @@ BackMap::BackMap(Argument *pArgu)
         if(rem==true)
         (*it)->UpdateArea(0);
         else
-        p1.push_back(*it);
+        p2.push_back(*it);
     }
     
     // Make all the domain containing different lipids
