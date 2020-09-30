@@ -72,10 +72,16 @@ void Domain::Configure(bool renorm)
         Tarea+= (*it)->GetArea();
     }
     
+    double avAP = 0;
     // update the max no lipid of each lipid type in the domain
     for ( std::vector<DomainLipid>::iterator it = m_AllDomainLipids.begin(); it != m_AllDomainLipids.end(); it++ )
     {
-        (*it).MaxNo= int(Tarea/((*it).Ap)*((*it).Ratio));
+        avAP+= ((*it).Ap)*((*it).Ratio);
+        //  (*it).DynamicMaxNo = (*it).MaxNo;
+    }
+    for ( std::vector<DomainLipid>::iterator it = m_AllDomainLipids.begin(); it != m_AllDomainLipids.end(); it++ )
+    {
+        (*it).MaxNo= int(((*it).Ratio)*Tarea/avAP);
         (*it).no_created = 0;
         //  (*it).DynamicMaxNo = (*it).MaxNo;
     }
