@@ -1,0 +1,17 @@
+
+
+; lipidnname ratio_up ratio_down  APL
+[Lipids List]
+Domain 0
+POPC 1  1  0.68
+End
+Domain 1
+POPC 1  1  0.68
+End
+[Protein List]
+End Protein
+
+
+
+
+

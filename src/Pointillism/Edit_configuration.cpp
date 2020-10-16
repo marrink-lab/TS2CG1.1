@@ -513,6 +513,7 @@ UpdateGeometry();
         if(layer==-1)
         fi=m_Folder+"visualization_data/Lower.vtu";
         vtu.Writevtu(m_pAllV,m_pAllT,m_pAllLinks,fi);
+        TSI.WriteTSI(0,"extended.tsi",m_pAllV,m_pAllT,m_pInc);
     }
     
     //=============

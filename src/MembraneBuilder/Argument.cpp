@@ -147,7 +147,7 @@ Argument::Argument(std::vector <std::string> argument)
             else
             {
                 std::cout << "Error: wrong command :"<<Arg1;
-                std::cout<<"\n"<<"For more information and tips execute ./DMC -h"<<"\n";
+                std::cout<<"\n"<<"For more information and tips execute ./PCG -h"<<"\n";
                 m_ArgCon=0;
                 m_Health = false;
             }

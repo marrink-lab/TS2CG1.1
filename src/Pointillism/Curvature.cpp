@@ -145,7 +145,7 @@ Curvature::Curvature(vertex * pvertex)
     {
         c1=0;
         c2=0;
-        std::cout<<delta<<"  error: delta is negative, this means curvature cannot be found \n";
+       // std::cout<<delta<<"  error: delta is negative, this means curvature cannot be found \n";
     }
 
    // if(true) in general we do not need this, only if we have directional inclsuions
