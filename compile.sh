@@ -16,4 +16,9 @@ g++ -o PLM *.o
 rm *.o
 mv PLM ../../
 cd ..
-
+cd Solvate
+g++ -c -O3 *.cpp
+g++ -o SOL *.o
+rm *.o
+mv SOL ../../
+cd ..
