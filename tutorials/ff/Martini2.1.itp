@@ -96,7 +96,7 @@ AC1 72.0 0.000 A 0.0 0.0
 
 ; BIG particle type (to prevent freezing of water)
 BP4 72.0 0.000 A 0.0 0.0
-
+;WL 72.0 0.000 A 0.0 0.0
 
 [ nonbond_params ]
 
@@ -117,6 +117,7 @@ BP4 72.0 0.000 A 0.0 0.0
 
 ; i j	funda c6 c12 
 ; self terms
+;  WL 	C1 	1 	0.86233E-01 	0.92953E-03 ; repulsive 
   P5 	P5 	1 	0.24145E-00 	0.26027E-02 ; supra attractive
   SP5 	SP5 	1 	0.10620E-00 	0.67132E-03 ; 75supra attractive, s=0.43
   P4 	P4 	1 	0.21558E-00 	0.23238E-02 ; attractive 

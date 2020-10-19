@@ -141,7 +141,12 @@ Solvate::Solvate(Argument *pArg)
             std::cout<<" No of generated ions + "<<PIonBead.size()<<": - "<<NIonBead.size()<<"\n";
             std::cout<<" Requested + "<<ion.at(0)<<": - "<<ion.at(1)<<"\n";
 
-            std::vector<bead> PreBeads = InGro.GetAllBeads();
+            std::ofstream info;
+            info.open("info.txt");
+            info<<"W    "<<WaterBead.size()<<"\n";
+            info<<"NA    "<<PIonBead.size()<<"\n";
+            info<<"CL    "<<NIonBead.size()<<"\n";
+             std::vector<bead> PreBeads = InGro.GetAllBeads();
             for (std::vector<bead>::iterator it = WaterBead.begin() ; it != WaterBead.end(); ++it)
                 PreBeads.push_back(*it);
             
@@ -154,6 +159,8 @@ Solvate::Solvate(Argument *pArg)
             TemGro.RenewBeads(PreBeads);
             TemGro.UpdateBox(*FBox);
             TemGro.WriteGroFile(outgrofilename);
+            
+            
             
         }
         else

@@ -1,4 +1,4 @@
-define        -DRESPO4
+define         = -DRESPO4
 integrator               = steep
 nsteps                   = 1000
 nstxout                  = 0

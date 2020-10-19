@@ -15,7 +15,7 @@ title                    = Martini
 
 integrator               = md
 dt                       = 0.01
-nsteps                   = 1000
+nsteps                   = 3000
 nstcomm                  = 100
 comm-grps		 = 
 

@@ -11,7 +11,7 @@ title                    = Martini
 ; Time steps exceeding 40 fs should not be used; time steps smaller
 ; than 20 fs are also not required unless specifically stated in the itp file.
 
-define        -DRESPO4
+define        =  -DRESPO4
 
 integrator               = md
 dt                       = 0.03  
