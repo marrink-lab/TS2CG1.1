@@ -1,0 +1,12 @@
+; Beads for wall in new TS2CG
+[moleculetype]
+; molname nrexcl 
+WALL 1
+[atoms]
+; id 	type 	resnr 	residu 	atom 	cgnr 	charge
+1 	WL 	 1 	WAL 	WL 	 1 	0 
+[ position_restraints ]
+; ai  funct  fcx    fcy    fcz
+1    1    1000   1000   1000   ; restrains to a point
+
+
