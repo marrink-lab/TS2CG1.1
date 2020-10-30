@@ -53,7 +53,10 @@ bool health = true;
 m_pBox=pBox;
     m_MosAlType = "Type1";
 double bilyaerthickness = 1;
-m_Zoom = 1;
+m_Zoom(0) = 1;
+    m_Zoom(1) = 1;
+    m_Zoom(2) = 1;
+
   m_Iteration = -1;
     std::string file = "TS.q";
     m_AP = 0.62;
@@ -73,7 +76,12 @@ m_Zoom = 1;
         }
         if(Arguments.at(i)=="-rescalefactor")
         {
-            m_Zoom=f.String_to_Double(Arguments.at(i+1));
+            m_Zoom(0)=f.String_to_Double(Arguments.at(i+1));
+            m_Zoom(1)=f.String_to_Double(Arguments.at(i+2));
+            m_Zoom(2)=f.String_to_Double(Arguments.at(i+3));
+            i=i+2;
+
+
         }
         if(Arguments.at(i)=="-ap")
         {
@@ -245,23 +253,23 @@ Edit_configuration::~Edit_configuration()
 {
     
 }
-void Edit_configuration::Rescaling(double zoom )
+void Edit_configuration::Rescaling(Vec3D zoom )
 {
     
     Vec3D L((*m_pBox)(0),(*m_pBox)(1),(*m_pBox)(2));
     
-    (*m_pBox)(0) = zoom*L(0);
-    (*m_pBox)(1) = zoom*L(1);
-    (*m_pBox)(2) = zoom*L(2);
+    (*m_pBox)(0) = zoom(0)*L(0);
+    (*m_pBox)(1) = zoom(1)*L(1);
+    (*m_pBox)(2) = zoom(2)*L(2);
     
     for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
     {
         double x = (*it)->GetVXPos();
         double y = (*it)->GetVYPos();
         double z = (*it)->GetVZPos();
-        (*it)->UpdateVXPos(zoom*x);
-        (*it)->UpdateVYPos(zoom*y);
-        (*it)->UpdateVZPos(zoom*z);
+        (*it)->UpdateVXPos(zoom(0)*x);
+        (*it)->UpdateVYPos(zoom(1)*y);
+        (*it)->UpdateVZPos(zoom(2)*z);
         
     }
     
@@ -432,10 +440,17 @@ std::cout<<" error: Unknown TS File Format "<<file<<"\n";
     
     UpdateGeometry();
     if(m_Iteration==-1 )
-    {       double Tarea  = 0;
+    {
+            double LargeZoom = m_Zoom(0);
+            if(LargeZoom<m_Zoom(1))
+            LargeZoom = m_Zoom(1);
+            if(LargeZoom<m_Zoom(2))
+            LargeZoom = m_Zoom(2);
+        
+            double Tarea  = 0;
             for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
             Tarea+= (*it)->GetArea();
-            double requiredNo = Tarea*m_Zoom*m_Zoom/(m_AP*double (m_pAllV.size()));
+            double requiredNo = Tarea*LargeZoom*LargeZoom/(m_AP*double (m_pAllV.size()));
             m_Iteration = int (log(requiredNo)/log(4))+1;
             if(m_Iteration<5)
             std::cout<<"We will increase the number of the available points by 4^"<<m_Iteration<<"\n";

@@ -40,7 +40,7 @@ help::help(std::string version,std::string exe)
         std::cout<<"-------------------------------------------------------------------------------"<<"\n";
         std::cout<<"  option                type        default            description "<<"\n";
         std::cout<<"-------------------------------------------------------------------------------"<<"\n";
-        std::cout<<"  -rescalefactor        double          1               rescaling factor  "<<"\n";
+        std::cout<<"  -rescalefactor        Vector        (1,1,1)           rescaling factor  "<<"\n";
         std::cout<<"  -bilayerThickness     double          1               bilayer thickness "<<"\n";
         std::cout<<"  -monolayer            int             0               to generate monolayer instead (1/-1)  "<<"\n";
         std::cout<<"  -r                    string         PLM              function(PLM/check/add_pbc) "<<"\n";
