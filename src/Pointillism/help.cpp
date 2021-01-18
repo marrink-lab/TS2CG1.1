@@ -40,12 +40,12 @@ help::help(std::string version,std::string exe)
         std::cout<<"-------------------------------------------------------------------------------"<<"\n";
         std::cout<<"  option                type        default            description "<<"\n";
         std::cout<<"-------------------------------------------------------------------------------"<<"\n";
-        std::cout<<"  -rescalefactor        Vector        (1,1,1)           rescaling factor  "<<"\n";
-        std::cout<<"  -bilayerThickness     double          1               bilayer thickness "<<"\n";
+        std::cout<<"  -rescalefactor        rx,ry,rz      (1,1,1)           rescaling factor (Note: there is no guarantee to get proper surface if rx,ry,rz are not equal. "<<"\n";
+        std::cout<<"  -bilayerThickness     double         3.8               bilayer thickness "<<"\n";
         std::cout<<"  -monolayer            int             0               to generate monolayer instead (1/-1)  "<<"\n";
         std::cout<<"  -r                    string         PLM              function(PLM/check/add_pbc) "<<"\n";
         std::cout<<"  -o                    string         point            name of the output folder "<<"\n";
-        std::cout<<"  -shape                string         no               fixed geometry (flat) "<<"\n";
+        std::cout<<"  -shape                string         no               fixed geometry (flat/other will be added soon) "<<"\n";
         std::cout<<"  -resizebox            ------         no               find a better box for the system  "<<"\n";
         std::cout<<"  -TSfile               string         TS.q             TS file name (three file format type, *.q/*.tsi/*.dat)"<<"\n";
         std::cout<<"  -Mashno               int             1               number of Mosaicing, your point number grows as 4^Mashno  "<<"\n";

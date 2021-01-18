@@ -92,13 +92,13 @@ Argument::Argument(std::vector <std::string> argument)
                 //  i++;
                 
             }
-            else if(Arg1=="-smooth"  )
+            else if(Arg1=="-smooth"  || Arg1=="-resizebox")
             {
                 
                   i=i-1;
                 
             }
-            else if(Arg1=="-ap" || Arg1=="-zoom" || Arg1=="-apwall" || Arg1=="-TSfile" || Arg1=="-bilayerThickness" || Arg1=="-rescalefactor" || Arg1=="-layer"|| Arg1=="-o" || Arg1=="-shape" || Arg1=="-monolayer" || Arg1=="-resizebox")
+            else if(Arg1=="-ap" || Arg1=="-zoom" || Arg1=="-apwall" || Arg1=="-TSfile" || Arg1=="-bilayerThickness"  || Arg1=="-layer"|| Arg1=="-o" || Arg1=="-shape" || Arg1=="-monolayer" )
             {
                 
                 // this data will be read directly from the class
@@ -112,6 +112,13 @@ Argument::Argument(std::vector <std::string> argument)
                 // this data will be read directly from MD dynamic wall class
                 
                 //  i++;
+                
+            }
+            else if(Arg1=="-rescalefactor" )
+            {
+                
+                i=i+2;
+                // this is for gen morphology class
                 
             }
             else if(Arg1=="-n"  )
