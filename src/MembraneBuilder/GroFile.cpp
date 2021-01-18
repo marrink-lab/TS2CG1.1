@@ -26,7 +26,6 @@ void GroFile::AddBead(bead b)
 void GroFile::ReadGroFile(std::string file)
 {
     Nfunction f;
-    char str[1000];
     if(file.size()<4)
     {
         file=file+".gro";
@@ -40,88 +39,50 @@ void GroFile::ReadGroFile(std::string file)
         file=file+".gro";
     }
     
-    
+    std::string str;
     std::ifstream FGRO;
     FGRO.open(file.c_str());
-    std::string str1;
-    getline (FGRO,str1);
-    getline (FGRO,str1);
-    FILE *fgro;
-    fgro = fopen(file.c_str(), "r");
-
-    if (fgro == NULL){
-        printf(" Error: Could not open file %s",file.c_str());
-    }
-    bool check = fgets(str, 1000, fgro);
-    m_Title = str;
-    m_Title.pop_back();
-     check = fgets(str, 1000, fgro);
-
-    int NoBeads = atoi(str);
-    
-    // Reading the atoms from gro file
-    
-    float x,y,z,v1,v2,v3;
-    char *A1;
-    char *A2;
-    
-    char a[200];
-    char b[200];
-    int resid,beadid;
-    std::string beadtype = "MDBeads";
-    
-    for (int i=0; i<NoBeads; i++) //NoBeads
+    std::string title;
+    getline (FGRO,title);
+    int atomno;
+    FGRO>>atomno;
+    getline (FGRO,str);
+    std::string resname,aname;
+    for (int i=0; i<atomno; i++) //NoBeads
     {
-
-        getline (FGRO,str1);
-        std::vector <std::string> l=f.split(str1);
+        char *cr  = new char [5];
+        FGRO.read(cr,5);
+        int resid = atoi(cr);
+        FGRO.read(cr,5);
+        resname = cr;
+        resname.erase(remove_if(resname.begin(), resname.end(), isspace), resname.end());
+        FGRO.read(cr,5);
+        aname = cr;
+        aname.erase(remove_if(aname.begin(), aname.end(), isspace), aname.end());
+        FGRO.read(cr,5);
+        int atomno = atoi(cr);
+        char *Xr  = new char [8];
+        FGRO.read(Xr,8);
+        double X=atof(Xr);
+        FGRO.read(Xr,8);
+        double Y=atof(Xr);
+        FGRO.read(Xr,8);
+        double Z=atof(Xr);
+        getline (FGRO,title);
         
-        int readafile = fscanf(fgro, "%d%s%s%d%f%f%f",&resid,a,b,&beadid,&x,&y,&z);
-        check = fgets(str, 1000, fgro);
-        
-        if(l.size()==7 || l.size()==10)
-        {
-            x=atof((l.at(4)).c_str());
-            y=atof((l.at(5)).c_str());
-            z=atof((l.at(6)).c_str());
-        }
-        else if(l.size()==6 || l.size()==9)
-        {
-            x=atof((l.at(3)).c_str());
-            y=atof((l.at(4)).c_str());
-            z=atof((l.at(5)).c_str());
-        }
-        else if(l.size()==5 || l.size()==8)
-        {
-            x=atof((l.at(2)).c_str());
-            y=atof((l.at(3)).c_str());
-            z=atof((l.at(4)).c_str());
-        }
-        else
-        {
-            std::cout<<"Warning: Perhaps error, something wrong with"<<file <<"file \n";
-        }
-        std::string bt = b;
-        std::string beadname;
-        if(bt.size()>0)
-        beadname.push_back(bt.at(0));
-        if(bt.size()>1)
-        beadname.push_back(bt.at(1));
-
-        std::string resname = a;
-        bead Be(i, beadname, beadtype, resname, resid, x, y, z);
+        bead Be(i, aname, aname, resname, resid, X, Y, Z);
         m_AllBeads.push_back(Be);
-
-        //  std::cout<<resid<<"  "<<resname<<"  "<<beadname<<" "<<beadid<<" "<<x<<"  "<<y<<"  "<<z<<"  \n";
-
-
+        
     }
-    FGRO.close();
     float Lx,Ly,Lz;
-    int readafile = fscanf(fgro, "%f%f%f",&Lx,&Ly,&Lz);
-   // std::cout<<Lx<<" "<<Ly<<" "<<Lz<<" \n";
-
-    fclose(fgro);
+    char *Lr  = new char [10];
+    FGRO.read(Lr,10);
+    Lx=atof(Lr);
+    FGRO.read(Lr,10);
+    Ly=atof(Lr);
+    FGRO.read(Lr,10);
+    Lz=atof(Lr);
+    FGRO.close();
     
     m_Box(0)=Lx; m_Box(1)=Ly; m_Box(2)=Lz;
     m_pBox = &m_Box;
