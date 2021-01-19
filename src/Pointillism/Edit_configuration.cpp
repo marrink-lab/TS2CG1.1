@@ -27,52 +27,53 @@ then generate two surfaces that can be used to create a bilayer.
  Then generate two surfaces .
  
  */
-Edit_configuration::Edit_configuration( Argument *pArgument)
+Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
 {
 
 
 ///=======
 //== Read  variables
 //===========
-Nfunction f;
-    m_Shape ="";
-bool ShapeFlag = false;
-//f.CleanFiles();	
-std::vector <std::string> Arguments = pArgument->GetArgumentString();
-    std::string edittype = "PLM";
-    m_Folder = "point";
+    bool health = true; // will be false as soon as an error happens
+    Nfunction f;    // an object to use some of pre-made functions
+    m_Shape ="";    // type of shape
+    bool ShapeFlag = false;
     m_smooth = false;
+    m_Folder = "point";
+    std::string edittype = "PLM";
     m_monolayer = 0;
+
+//  Info about box
     Vec3D Box(3,3,3);
-    Box(0)=f.String_to_Double(pArgument->GetLx());
-    Box(1)=f.String_to_Double(pArgument->GetLy());
-    Box(2)=f.String_to_Double(pArgument->GetLz());
-    m_FindnewBox = false;
     Vec3D *pBox=&Box;
-bool health = true;
-m_pBox=pBox;
-    m_MosAlType = "Type1";
-double bilyaerthickness = 3.8;
-m_Zoom(0) = 1;
+    m_pBox=pBox;
+    m_FindnewBox = false; // if true, find a box as small as possible
+
+    
+    m_MosAlType = "Type1"; // algorithm type, Type1 and Type2
+    double bilyaerthickness = 3.8;
+    
+    m_Zoom(0) = 1;
     m_Zoom(1) = 1;
     m_Zoom(2) = 1;
-
-  m_Iteration = -1;
+    m_Iteration = -1;
     std::string file = "TS.q";
     m_AP = 0.62;
+    
+// read the arguments in the command line and update the variables
     for (int i=1;i<Arguments.size();i=i+2)
     {
         if(Arguments.at(i)=="-TSfile")
         {
-            file=Arguments.at(i+1);
+            file=Arguments.at(i+1);    // ts file name, *.q, *.tsi, *.dat
         }
         if(Arguments.at(i)=="-bilayerThickness")
         {
-            bilyaerthickness=f.String_to_Double(Arguments.at(i+1));
+            bilyaerthickness=f.String_to_Double(Arguments.at(i+1));  //bilayer thickness
         }
         if(Arguments.at(i)=="-AlgType")
         {
-            m_MosAlType=(Arguments.at(i+1));
+            m_MosAlType=(Arguments.at(i+1));  // algorithm type, Type1 and Type2
         }
         if(Arguments.at(i)=="-rescalefactor")
         {
@@ -80,8 +81,6 @@ m_Zoom(0) = 1;
             m_Zoom(1)=f.String_to_Double(Arguments.at(i+2));
             m_Zoom(2)=f.String_to_Double(Arguments.at(i+3));
             i=i+2;
-
-
         }
         if(Arguments.at(i)=="-ap")
         {
@@ -149,7 +148,6 @@ m_Zoom(0) = 1;
       }
       else if (edittype=="PLM" && health == true )
       {
-  
 
        // WriteFiles vtu(m_pBox);
         
@@ -738,16 +736,20 @@ bool Edit_configuration::check(std::string file){
             std::vector <double> C = (*it)->GetCurvature();
             totalgaussianC+= (C.at(0))*(C.at(1))*((*it)->GetArea());
         }
-        
+        int nv = m_pAllV.size();
+        int nt = m_pAllT.size();
+        int nl = m_pHalfLinks1.size();
         std::cout<<" ************************************************************************************** \n";
         std::cout<<" Total area of the surface is "<<Tarea<<" nm^2 you can use -rescalefactor to increase it \n";
-        std::cout<<" total gaussian curvature /4PI is: "<<totalgaussianC/(4*pi)<<" \n";
-
-    }
+        //std::cout<<" total gaussian curvature /2PI is: "<<totalgaussianC/(2*pi)<<" \n";
+       // std::cout<<" total mean curvature /2PI is: "<<totalmeanC/(2*pi)<<" \n";
+        std::cout<<" Euler characteristic: "<<nv+nt-nl<<" \n";
+        std::cout<<" topology genus "<<(2-(nv+nt-nl))/2<<" \n";
         
 
-    
-    
+
+    }
+
     return true;
     
 }
@@ -755,9 +757,6 @@ bool Edit_configuration::check(std::string file){
 void Edit_configuration::MakeFlatMonolayer(int layer , std::string file, double H)
 {
 
-
-
-    
     for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
     {
         double x = (*it)->GetVXPos();
@@ -775,15 +774,10 @@ void Edit_configuration::MakeFlatMonolayer(int layer , std::string file, double 
         
     }
 
-
-    
     double Lx=(*m_pBox)(0);
     double Ly=(*m_pBox)(1);
     double Lz=(*m_pBox)(2);
-    
-    
 
-    
     //=============
     
     std::string     UFUpper = m_Folder+"/OuterBM.dat";

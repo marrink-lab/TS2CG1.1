@@ -1,22 +1,14 @@
-
-
-
-#include "Argument.h"
 #include "Job.h"
 #include "Nfunction.h"
 #include "Edit_configuration.h"
 
 Job::Job(std::vector <std::string> argument)
 {
+    /*
+     *  Copyright Weria Pezeshkian (weria.pezeshkian@gmail.com), 2020.
+     * This is a class to call different functions: at the moment, only one exist
+     */
 
-Argument a(argument);
-Argument *pArgument= &a;       // a pointer to Argument class to pass it to all other classes
-    
-    
- 
-if (a.GetArgCon()==1)
-{
- 
 std::string exacutable=argument.at(0);
 int  n=exacutable.size();
 char L1 = exacutable.at(n-1);
@@ -37,7 +29,7 @@ bool condition = true;
     {
         if( L3 == 'P' && L2 == 'L' && L1 == 'M')
         {
-            Edit_configuration B(pArgument);
+            Edit_configuration B(argument);
         }
         else if(n<3)
         {
@@ -47,8 +39,6 @@ bool condition = true;
 
     }
 
-
-}
 
 }
 Job::~Job()
