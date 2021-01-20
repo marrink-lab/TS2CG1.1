@@ -433,34 +433,37 @@ std::cout<<" error: Unknown TS File Format "<<file<<"\n";
     
     //m_pBox;
     
-    Vec3D MaxB(0,0,0);
-    Vec3D DB (10,10,10);
+
   if(m_FindnewBox==true)
   {
-      for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
-      {
-          for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
-          {
-              double dx = (*it1)->GetVXPos()-(*it)->GetVXPos();
-              double dy = (*it1)->GetVYPos()-(*it)->GetVYPos();
-              double dz = (*it1)->GetVZPos()-(*it)->GetVZPos();
-              
-              if(MaxB(0)<dx)
-                  MaxB(0)=dx;
-              if(MaxB(1)<dy)
-                  MaxB(1)=dy;
-              if(MaxB(2)<dz)
-                  MaxB(2)=dz;
-
-          }
-      }
+      
+      // Finding the center of geometry
       Vec3D CM(0,0,0);
       for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
       {
           Vec3D X ((*it1)->GetVXPos(),(*it1)->GetVYPos(),(*it1)->GetVZPos());
           CM = CM+X*(1.0/m_pAllV.size());
       }
-      (*m_pBox) = MaxB+DB;
+      
+      // Finding the max distance from the CMG
+      Vec3D MaxB(0,0,0);
+      for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
+      {
+
+              double dx = (*it)->GetVXPos()-CM(0);
+              double dy = (*it)->GetVYPos()-CM(1);
+              double dz = (*it)->GetVZPos()-CM(2);
+          
+              if(MaxB(0)<fabs(dx))
+                  MaxB(0)=fabs(dx);
+              if(MaxB(1)<fabs(dy))
+                  MaxB(1)=fabs(dy);
+              if(MaxB(2)<fabs(dz))
+                  MaxB(2)=fabs(dz);
+
+      }
+      Vec3D DB (4+H,4+H,4+H);
+      (*m_pBox) = MaxB*2+DB;
       for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
       {
           Vec3D X ((*it1)->GetVXPos(),(*it1)->GetVYPos(),(*it1)->GetVZPos());
