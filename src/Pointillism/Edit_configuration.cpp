@@ -7,6 +7,7 @@
 #include "Curvature.h"
 #include "Edit_configuration.h"
 #include "WriteFiles.h"
+#include "help.h"
 #include "Nfunction.h"
 #include "Vec3D.h"
 #include "VMDOutput.h"
@@ -61,6 +62,12 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
     m_AP = 0.62;
     
 // read the arguments in the command line and update the variables
+    if (Arguments.size() == 2 && Arguments.at(1)=="-h")
+    {
+            help helpmessage(SoftWareVersion, Arguments.at(0));
+            health = false;
+    }
+    else {
     for (int i=1;i<Arguments.size();i=i+2)
     {
         if(Arguments.at(i)=="-TSfile")
@@ -119,6 +126,7 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
             m_Shape = Arguments.at(i+1);
         }
 
+    }
     }
     
 
@@ -426,7 +434,7 @@ std::cout<<" error: Unknown TS File Format "<<file<<"\n";
     //m_pBox;
     
     Vec3D MaxB(0,0,0);
-    Vec3D DB (4,4,4);
+    Vec3D DB (10,10,10);
   if(m_FindnewBox==true)
   {
       for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
