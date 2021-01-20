@@ -13,11 +13,8 @@ m_X = x;
 m_Y = y;
 m_Z = z;
 m_ID = id;
-m_kappa=1.0;
-    m_SimTimeStep=-1;
     m_NetworkID = 0;
     m_OwnInclusion = false;
-    m_kappaG = 0;
     m_DomainID = 0;
     m_IsFullDomain = true;
 }
@@ -28,11 +25,8 @@ m_ID=id;
 m_X=0;
 m_Y=0;
 m_Z=0;
-m_kappa=1.0;
-    m_SimTimeStep=-1;
     m_NetworkID = 0;
     m_OwnInclusion = false;
-    m_kappaG = 0;
     m_DomainID = 0;
     m_IsFullDomain = true;
 
@@ -102,12 +96,7 @@ void vertex::AddtoLinkList(links* z)
 {
 m_VLinkList.push_back(z);
 }
-void vertex::UpdateKappa(double z1, double z2)
-{
-    m_kappa=z1;
-    m_kappaG=z2;
 
-}
 
 
 
@@ -163,10 +152,7 @@ void vertex::UpdateClusterID(int z)
 {
     m_NetworkID=z;
 }
-void vertex::UpdateEnergy(double z)
-{
-m_Energy=z;
-}
+
 
 
 
@@ -199,10 +185,6 @@ void vertex::UpdateG2LTransferMatrix(Tensor2 v)
     
     m_T_Global_2_Local = v;
     
-}
-void vertex::UpdateSimTimeStep(int v)
-{
-    m_SimTimeStep=v;
 }
 bool vertex::CheckCNT()
 {
@@ -317,14 +299,8 @@ void vertex::ReadVertexFromFile(std::ifstream *inputfile,std::vector <vertex *> 
 
     Nfunction f;
     std::getline((*inputfile),word);
-    if(word.size()==0)
-        m_kappaG = 0;
-    else
-        m_kappaG = f.String_to_Double(word);
+   
 
-    m_kappa=k;
-    
-    
     if(readok!=true)
     {
         std::cout<<"Error: wrong vertex id in reading the file: perhpas the file is broken \n";
@@ -364,7 +340,7 @@ void vertex::WriteVertexToFile(std::ofstream *output)
         (*output)<<(*it)->GetVID()<<" ";
     }
     (*output)<<"\n";
-    (*output)<<"Kappa "<<m_kappa<<"  "<<m_kappaG<<"\n";
+    (*output)<<"Kappa "<<0<<"  "<<0<<"\n";
 
 
 }

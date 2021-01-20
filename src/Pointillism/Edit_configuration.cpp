@@ -423,6 +423,46 @@ else
 std::cout<<" error: Unknown TS File Format "<<file<<"\n";
 }
     
+    //m_pBox;
+    
+    Vec3D MaxB(0,0,0);
+    Vec3D DB (4,4,4);
+  if(m_FindnewBox==true)
+  {
+      for (std::vector<vertex *>::iterator it = m_pAllV.begin() ; it != m_pAllV.end(); ++it)
+      {
+          for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
+          {
+              double dx = (*it1)->GetVXPos()-(*it)->GetVXPos();
+              double dy = (*it1)->GetVYPos()-(*it)->GetVYPos();
+              double dz = (*it1)->GetVZPos()-(*it)->GetVZPos();
+              
+              if(MaxB(0)<dx)
+                  MaxB(0)=dx;
+              if(MaxB(1)<dy)
+                  MaxB(1)=dy;
+              if(MaxB(2)<dz)
+                  MaxB(2)=dz;
+
+          }
+      }
+      Vec3D CM(0,0,0);
+      for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
+      {
+          Vec3D X ((*it1)->GetVXPos(),(*it1)->GetVYPos(),(*it1)->GetVZPos());
+          CM = CM+X*(1.0/m_pAllV.size());
+      }
+      (*m_pBox) = MaxB+DB;
+      for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
+      {
+          Vec3D X ((*it1)->GetVXPos(),(*it1)->GetVYPos(),(*it1)->GetVZPos());
+          (*it1)->UpdateVXPos((*it1)->GetVXPos()-CM(0)+((*m_pBox)(0))*0.5);
+          (*it1)->UpdateVYPos((*it1)->GetVYPos()-CM(1)+((*m_pBox)(1))*0.5);
+          (*it1)->UpdateVZPos((*it1)->GetVZPos()-CM(2)+((*m_pBox)(2))*0.5);
+
+      }
+  }
+    
     /*std::cout<<m_pAllV.size()<<" vertex size \n";
     VMDOutput GRO((*m_pBox), m_pAllV , m_pHalfLinks1, "test");
     GRO.WriteGro();
