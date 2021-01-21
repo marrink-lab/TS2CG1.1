@@ -282,6 +282,7 @@ void Topology::FastReadQFile(std::string Filename)
         
     }
     
+    
     /*  double CM;
      for (std::vector<vertex>::iterator it = m_Vertex.begin() ; it != m_Vertex.end(); ++it)
      {
