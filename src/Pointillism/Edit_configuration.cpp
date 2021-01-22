@@ -462,7 +462,7 @@ std::cout<<" error: Unknown TS File Format "<<file<<"\n";
                   MaxB(2)=fabs(dz);
 
       }
-      Vec3D DB ((3+H)/m_Zoom(0),(3+H)/m_Zoom(1),(3+H)/m_Zoom(2));
+      Vec3D DB ((6+H)/m_Zoom(0),(6+H)/m_Zoom(1),(6+H)/m_Zoom(2));
       (*m_pBox) = MaxB*2+DB;
       for (std::vector<vertex *>::iterator it1 = m_pAllV.begin() ; it1 != m_pAllV.end(); ++it1)
       {

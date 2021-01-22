@@ -35,10 +35,11 @@ ReadLipidLibrary::ReadLipidLibrary(Argument *pArgu)
     if(str=="Description")
     {
     std::getline (LiBFile,m_LiBTitle);
+
     }
     else
     {
-        std::cout<<"Error: broken Lib File "<<LiBfilename<<"\n";
+        std::cout<<"Error: broken Lib File "<<LiBfilename<<": bad title   "<<  m_LiBTitle    <<"\n";
         m_Health = false;
     }
     LiBFile>>str;
@@ -73,7 +74,7 @@ ReadLipidLibrary::ReadLipidLibrary(Argument *pArgu)
                 molbead.clear();
                 break;
             }
-        
+
             str = f.trim(str);
             if(str.size()!=0 && str.at(0)!=';')
             {
@@ -94,6 +95,7 @@ ReadLipidLibrary::ReadLipidLibrary(Argument *pArgu)
                     str.erase(std::remove(str.begin(), str.end(), ']'), str.end());
                     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
                     lipidname = str;
+
                     
                 }
                 else if (start==true )

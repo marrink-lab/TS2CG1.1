@@ -162,6 +162,8 @@ BackMap::BackMap(Argument *pArgu)
         tempropbeads.push_back(&(*it));
     
         GenerateUnitCells GCNT(tempropbeads, pArgu,pBox,RCutOff);
+    
+        if (m_TotalProteinList.size()!=0)
         GCNT.Generate();
     
     

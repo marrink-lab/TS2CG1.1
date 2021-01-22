@@ -59,7 +59,7 @@ GenerateMolType::GenerateMolType(Argument *pArgu)
     //====== Check if a Lib is defined, otherwise read what we have here
     if(pArgu->GetLipidLibrary()=="no")
     {
-        std::cout<<"-> Note the lipids will be generated from the enternal memory (Martini 2) of "<<SoftWareName<<".  \n";
+        std::cout<<"-> Note the lipids will be generated from the internal lib (Martini 2) of "<<SoftWareName<<".  \n";
         LiBMol();
     }
     else
