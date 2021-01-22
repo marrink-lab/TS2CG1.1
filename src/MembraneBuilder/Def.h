@@ -25,7 +25,7 @@
 
 
 
-#define Libarmadillo Disabled
+#define TESTMODE Enabled
 #define EigenLib Disabled
 #define NoLib Enabled
 

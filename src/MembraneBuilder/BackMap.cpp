@@ -39,7 +39,11 @@ BackMap::BackMap(Argument *pArgu)
     std::cout<<"=========================================================================================================="<<"\n";
 
     Nfunction f;      // In this class there are some useful function and we can use it.
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 1 \n";
+#endif
 
+    
     //===================== OutPut file name declaration and finding input file names ========================================
     std::string gname = pArgu->GetGeneralOutputFilename();
     m_FinalOutputGroFileName =gname+".gro";
@@ -47,34 +51,51 @@ BackMap::BackMap(Argument *pArgu)
     std::string dtsfolder = pArgu->GetDTSFolder();
     std::string strfilename = pArgu->GetStructureFileName();
     m_ResID = 1;
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 2 \n";
+#endif
     m_Renormalizedlipidratio = pArgu->GetRenorm();
     m_Iter = pArgu->GetIter();
     double RCutOff = pArgu->GetRCutOff();     /// That will be counted as a cutoff for the protein_lipid distance
     m_InclusionDirectionType = pArgu->GetInclusionDirectionType();
     std::cout<<"The inclusion direction type is: "<<m_InclusionDirectionType<<"\n";
     //==========================================================================================================
-    
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 3 \n";
+#endif
     GenerateMolType  MOLTYPE(pArgu);
     m_MoleculesType = MOLTYPE.GetMolType();
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 4 \n";
+#endif
     if(MOLTYPE.GetHealth()==false)
     {
         std::cout<<"-> aborted! You are allowed to try one more time. Kidding, please do not :) \n";
         std::exit(0);
         
     }
-
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 5 \n";
+#endif
     //================== Reading DTS folder to get the points ====================================================
     ReadDTSFolder ReadDTSFile(dtsfolder);
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 6 \n";
+#endif
     std::vector<inclusion*>  m_pInc = ReadDTSFile.GetInclusion();
     m_point1 = ReadDTSFile.GetUpperPoints();
     m_point2 = ReadDTSFile.GetInnerPoints();
     if(m_point2.size()==0)
     m_monolayer = true;
-    
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 7 \n";
+#endif
     Vec3D *pBox= ReadDTSFile.GetBox();
     m_Box (0)=(*pBox)(0);     m_Box (1)=(*pBox)(1);     m_Box (2)=(*pBox)(2);
     m_pBox = pBox;
-    
+#if TESTMODE == Enabled
+    std::cout<<" Test mode: Block ID 8 \n";
+#endif
     //********************** Finding the total area of the layers
     m_TotalAreaUp = 0.0;
     m_TotalAreaDown = 0.0;
@@ -152,6 +173,8 @@ BackMap::BackMap(Argument *pArgu)
         }
         plistid++;
     }
+    
+    std::cout<<" We have placed the proteins, now is time to add the lipids \n";
     std::vector<bead*> tempropbeads;
     std::vector<bead> temprobeads;
     
@@ -163,7 +186,6 @@ BackMap::BackMap(Argument *pArgu)
     
         GenerateUnitCells GCNT(tempropbeads, pArgu,pBox,RCutOff);
     
-        if (m_TotalProteinList.size()!=0)
         GCNT.Generate();
     
     
@@ -190,6 +212,7 @@ BackMap::BackMap(Argument *pArgu)
         p1.push_back(*it);
     }
     if(m_monolayer == false)
+    {
     for ( std::vector<point*>::iterator it = m_point2.begin(); it != m_point2.end(); it++ )
     {
         bool rem = false;
@@ -204,6 +227,7 @@ BackMap::BackMap(Argument *pArgu)
         else
         p2.push_back(*it);
     }
+    }
     
     // Make all the domain containing different lipids
     GenDomains GENDOMAIN(strfilename,p1,p2,m_Renormalizedlipidratio);
@@ -213,6 +237,7 @@ BackMap::BackMap(Argument *pArgu)
         std::cout<<"***************************  we aim to generate  ********************** \n";
     for ( std::vector<Domain*>::iterator it = pAllDomain.begin(); it != pAllDomain.end(); it++ )
     {
+
         layer++;
         std::vector<DomainLipid> DL = (*it)->GetDomainLipids();
         

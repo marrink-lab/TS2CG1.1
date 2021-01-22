@@ -597,18 +597,18 @@ UpdateGeometry();
     const char* Cbox="Box";
     
     if(layer==1)
-    fprintf(BMFile1,  "%s%8.3f%8.3f%8.3f\n",Cbox,Lx,Ly,Lz);
+    fprintf(BMFile1,  "%s%12.3f%12.3f%12.3f\n",Cbox,Lx,Ly,Lz);
     if(layer==2)
-    fprintf(BMFile2,  "%s%8.3f%8.3f%8.3f\n",Cbox,Lx,Ly,Lz);
+    fprintf(BMFile2,  "%s%12.3f%12.3f%12.3f\n",Cbox,Lx,Ly,Lz);
     
     const char* STR1="< Point NoPoints";
     const char* STR2=">";
     
     int NoPoints=m_pAllV.size();
     if(layer==1)
-    fprintf(BMFile1,  "%s%8d%s\n",STR1,NoPoints,STR2);
+    fprintf(BMFile1,  "%s%10d%s\n",STR1,NoPoints,STR2);
     if(layer==-1)
-    fprintf(BMFile2,  "%s%8d%s\n",STR1,NoPoints,STR2);
+    fprintf(BMFile2,  "%s%10d%s\n",STR1,NoPoints,STR2);
     
     const char* Cont="< id domain_id area X Y Z Nx Ny Nz P1x P1y P1z P2x P2y P2z C1 C2  >";
     if(layer==1)
@@ -653,9 +653,9 @@ UpdateGeometry();
 
         
         
-        if(layer==1) fprintf(BMFile1,"%5d%5d%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
+        if(layer==1) fprintf(BMFile1,"%5d%5d%10.3f%10.3f%10.3f%10.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
         
-        if(layer==-1) fprintf(BMFile2,"%5d%5d%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
+        if(layer==-1) fprintf(BMFile2,"%5d%5d%10.3f%10.3f%10.3f%10.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
         
         i++;
         
@@ -903,9 +903,9 @@ void Edit_configuration::MakeFlatMonolayer(int layer , std::string file, double 
         int domain = (*it)->GetDomainID();
 
         
-        if(layer==1) fprintf(BMFile1,"%5d%5d%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
+        if(layer==1) fprintf(BMFile1,"%5d%5d%10.3f%10.3f%10.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
         
-        if(layer==-1) fprintf(BMFile2,"%5d%5d%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
+        if(layer==-1) fprintf(BMFile2,"%5d%5d%10.3f%10.3f%10.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",i,domain,area,x,y,z,normal(0),normal(1),normal(2),GD1(0),GD1(1),GD1(2),GD2(0),GD2(1),GD2(2),curvature.at(0),curvature.at(1));
         
         i++;
         

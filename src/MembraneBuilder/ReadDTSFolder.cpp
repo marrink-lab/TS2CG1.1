@@ -133,7 +133,9 @@ std::vector<point> ReadDTSFolder::ReadPointObjects(std::string file, int lay)
         p.UpdateDomainID(domainid);
         AllPoint.push_back(p);
     }
-    
+#if TESTMODE == Enabled
+    std::cout<<" TEST MODE: ReadDTSFolder.cpp: We read one file "<< lay <<" \n";
+#endif
     
     return AllPoint;
 
