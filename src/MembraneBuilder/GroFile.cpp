@@ -44,6 +44,7 @@ void GroFile::ReadGroFile(std::string file)
     FGRO.open(file.c_str());
     std::string title;
     getline (FGRO,title);
+    m_Title = title;
     int atomno;
     FGRO>>atomno;
     getline (FGRO,str);

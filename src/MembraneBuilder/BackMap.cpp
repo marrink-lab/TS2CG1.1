@@ -153,13 +153,18 @@ BackMap::BackMap(Argument *pArgu)
 
     for ( std::map<int,ProteinList>::iterator it1 = m_TotalProteinList.begin(); it1 != m_TotalProteinList.end(); it1++ )
     {
+
         int plistid=it1->first;
+
         for ( std::vector<inclusion*>::iterator it = m_pInc.begin(); it != m_pInc.end(); it++ )
         {
+
             int id = (*it)->GetTypeID();
             if(plistid==id)
             {
+
             std::string ptype=(m_TotalProteinList.at(id)).ProteinName;
+
             int pointid = (*it)->GetPointID();
             Vec3D  Dir =  (*it)->GetDirection();
             point *Up_p1=m_point1.at(pointid);
@@ -167,8 +172,13 @@ BackMap::BackMap(Argument *pArgu)
             Vec3D Pos = Up_p1->GetPos();
             Vec3D T1 =   Up_p1->GetP1();
             Vec3D T2 =   Up_p1->GetP2();
-        
+                if (m_MoleculesType.count(ptype) == 0)
+                    std::cout << "Error:-----> molecule name " <<ptype<<" does not exist in the attached gro files \n";
+                
+                
             GenProtein(m_MoleculesType.at(ptype), id, Pos, N, Dir, T1,T2);
+                
+
             }
         }
         plistid++;
@@ -330,6 +340,9 @@ BackMap::BackMap(Argument *pArgu)
                 int t = LL->no_created;
                 ((*it)->GetpDomainLipids()).at(lipidlistID)->no_created=t+1;
                 //std::cout<< ((*it)->GetpDomainLipids()).at(lipidlistID)->no_created<<" "<<t+1<<"no beads \n";
+                if (m_MoleculesType.count(ltype) == 0)
+                    std::cout << "Error:-----> molecule name " <<ltype<<" does not exist in the lib files \n";
+                
                 GenLipid(m_MoleculesType.at(ltype), 0, Pos, N, Dir, T1, T2);
                 (dpoint.at(pointid))->UpdateArea(0);
             }
@@ -481,10 +494,11 @@ void BackMap::GenProtein(MolType moltype, int listid, Vec3D Pos, Vec3D Normal, V
     
 
         
-        
+
         Tensor2 LG = TransferMatLG(Normal, t1, t2);
         Tensor2 GL = LG.Transpose(LG);
-        
+    
+
         //===== to fit to the protein diretion
         Vec3D LocalDir;
         if(m_InclusionDirectionType=="Global")
@@ -492,13 +506,14 @@ void BackMap::GenProtein(MolType moltype, int listid, Vec3D Pos, Vec3D Normal, V
         else if(m_InclusionDirectionType=="Local")
         LocalDir = Dir;
 
+
         double C=LocalDir(0);
         double S= LocalDir(1);
         Tensor2 Rot=Rz(C,S);
         Vec3D DH= Normal*((m_TotalProteinList.at(listid)).Z0);
         double phi = (m_TotalProteinList.at(listid)).Phi;
         double theta = (m_TotalProteinList.at(listid)).Theta;
-        
+
         //
         std::vector<bead> vbeads = moltype.Beads;
         for ( std::vector<bead>::iterator it = vbeads.begin(); it != vbeads.end(); it++ )
@@ -509,7 +524,7 @@ void BackMap::GenProtein(MolType moltype, int listid, Vec3D Pos, Vec3D Normal, V
             bead TemB(beadid, (*it).GetBeadName(), (*it).GetBeadType(), (*it).GetResName(), m_ResID, vX(0), vX(1),vX(2));
             m_FinalBeads.push_back(TemB);
         }
-        
+
         m_ResID++;
   
     
