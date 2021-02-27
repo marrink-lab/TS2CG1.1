@@ -18,6 +18,7 @@ public:
 
     inline std::vector<bead> GetWallBead()                const  {return m_AllWallBeads;}
     inline std::vector<point*> GetWallPoint()                const  {return m_AllWallPoints;}
+    inline bool GetState()                const  {return m_State;}
 
 
 
@@ -30,7 +31,8 @@ public:
   void UpdateBeadName(std::string x);
   void PrintWallState();
   void CreateWall(std::vector<point*>  p1, std::vector<point*>  p2);
-
+  void Wall_itp();
+    void UpdateCellSize(double x);
 
 public:
 
@@ -44,10 +46,11 @@ private:
   double m_H;
   std::string m_BeadName;
   Vec3D *m_pBox;
+    double m_CellSize;
 
+    std::vector<bead> MakeUniformBeads(std::vector<point*> p);
 
-
-
+    
 
 };
 

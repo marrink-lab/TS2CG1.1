@@ -4,12 +4,11 @@
 #include "GenerateUnitCells.h"
 #include "Nfunction.h"
 //#include "links.h"
-GenerateUnitCells::GenerateUnitCells(std::vector< bead* > bead,Argument *pArgu,Vec3D *pBox, double cuttoff)
+GenerateUnitCells::GenerateUnitCells(std::vector< bead* > bead, Vec3D *pBox, double cuttoff, double cellsize)
 {
 	m_pBox=pBox;
     m_pAllBead=bead;
-    m_pArgu=pArgu;
-     m_CNTSize=1.0;
+    m_CNTSize=cellsize;
     m_Cutoff = cuttoff*cuttoff;
 }
 

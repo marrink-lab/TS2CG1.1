@@ -184,7 +184,7 @@ BackMap::BackMap(Argument *pArgu)
     for ( std::vector<bead>::iterator it = temprobeads.begin(); it != temprobeads.end(); it++ )
         tempropbeads.push_back(&(*it));
     
-        GenerateUnitCells GCNT(tempropbeads, pArgu,pBox,RCutOff);
+        GenerateUnitCells GCNT(tempropbeads, pBox,RCutOff,1.0);
     
         GCNT.Generate();
     
@@ -375,15 +375,20 @@ BackMap::BackMap(Argument *pArgu)
     //=============== Wall info and data
     
     Wall CWall = pArgu->GetWall();
+    CWall.UpdateBox(m_pBox);
     CWall.CreateWall(m_point1,m_point2);
     std::vector<bead> WB = CWall.GetWallBead();
     std::vector<point*> WPoint = CWall.GetWallPoint();
     
-    if(WPoint.size()>0)
+    if(WPoint.size()>0 && CWall.GetState()==true)
     {
         PDBFile pdb;
         std::string pdbfile = "wall.pdb";
         pdb.WritePDBFile(pdbfile, WPoint);
+    }
+    else if(CWall.GetState()==true)
+    {
+        std::cout<<"Note ----> No wall.pdb file will be generated since the total created wall beads are zero \n";
     }
     for (std::vector<bead>::iterator it = WB.begin() ; it != WB.end(); ++it)
     {

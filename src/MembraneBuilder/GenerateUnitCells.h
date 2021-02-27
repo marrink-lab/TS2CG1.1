@@ -12,7 +12,7 @@ class GenerateUnitCells
 public:
     
 
-	GenerateUnitCells(std::vector< bead* > bead,Argument *pArgu,Vec3D *pBox, double cuttoff);
+	GenerateUnitCells(std::vector< bead* > bead,Vec3D *pBox, double cuttoff, double cellsize);
 	~GenerateUnitCells();
 
 
@@ -34,7 +34,6 @@ int IDFromIndex(int,int,int);
     void Generate();
 
 private:
-    Argument *m_pArgu;
     std::map <std::string, UnitCell > m_AllCNTCells;
 
 int IndexFromID(int,int *,int *,int *);

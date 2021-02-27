@@ -26,26 +26,13 @@ Argument::Argument(std::vector <std::string> argument)
     m_Iter = 4;
     m_RCutOff = 0.5;
     
-    if (m_Argument.size()>300)
+    if (m_Argument.size()>3000)
     {
         std::cout << "Error: to many argument ";
-        std::cout<<"\n"<<"For more information and tips execute MCL -h"<<"\n";
-       m_ArgCon=0;
+        std::cout<<"\n"<<"For more information and tips execute PCG -h"<<"\n";
+        m_ArgCon=0;
         m_Health = false;
         
-    }
-    else if (m_Argument.size() == 2)
-    {
-        
-        Arg1 = m_Argument.at(1);
-        if (Arg1 == "-h" )
-        {
-        // help message should be made
-            help helpmessage(m_Argument.at(0));
-            m_ArgCon=0;
-            m_Health = false;
-        }
-
     }
     else
     {
@@ -60,6 +47,12 @@ Argument::Argument(std::vector <std::string> argument)
             else if(Arg1=="-defout")
             {
                 m_GeneralOutputFilename = m_Argument.at(i+1);
+            }
+            else if(Arg1=="-h")
+            {
+                help helpmessage(m_Argument.at(0));
+                m_Health = false;
+                break;
             }
             else if(Arg1=="-renorm")
             {
@@ -101,6 +94,10 @@ Argument::Argument(std::vector <std::string> argument)
             else if(Arg1=="-WallH")
             {
                 m_Wall.UpdateH(f.String_to_Double(m_Argument.at(i+1)));
+            }
+            else if(Arg1=="-WallBin")
+            {
+                m_Wall.UpdateCellSize(f.String_to_Double(m_Argument.at(i+1)));
             }
             else if(Arg1=="-LLIB")
             {

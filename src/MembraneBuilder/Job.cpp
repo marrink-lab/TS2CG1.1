@@ -45,10 +45,7 @@ if(a.GetHealth()==true )
     }
 
 }
-else
-{
-std::cout<<" Error in input data \n";
-}
+
 
 }
 Job::~Job()
