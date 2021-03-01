@@ -83,6 +83,8 @@ void Wall::CreateWall(std::vector<point*>  p1, std::vector<point*>  p2)
         std::vector<bead> b1 = MakeUniformBeads(p1);
         std::vector<bead> b2 = MakeUniformBeads(p2);
         
+
+        
         
         for (std::vector<bead>::iterator it = b1.begin() ; it != b1.end(); ++it)
          {
@@ -151,27 +153,37 @@ void Wall::Wall_itp()
     fclose (fitp);
 }
 /// This function creats a uniform bead distribution based on the given density
-std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> p)
+std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> &mypoints)
 {
+
 
     std::vector<bead> ReturnB;
     int i=0;
     int resid = 0;
     std::vector<bead> TB;
-    for (std::vector<point*>::iterator it = p.begin() ; it != p.end(); ++it)
+    for (std::vector<point*>::iterator it = mypoints.begin() ; it != mypoints.end(); ++it)
     {
+        
+        double p_area = (*it)->GetArea();
+      
+        
+        
         Vec3D X=(*it)->GetPos();
+        //Vec3D N=(p.at((*it)->GetID()))->GetNormal();
+       // X=X+N*(m_H);
         bead  tb(i, m_BeadName, m_BeadName, "Wall", resid,X(0), X(1),X(2));
         TB.push_back(tb);
         i++;
         resid++;
+        
+
+
     }
 
     std::vector<bead*> pTB;
     for (std::vector<bead>::iterator it = TB.begin() ; it != TB.end(); ++it)
         pTB.push_back(&(*it));
     
-
     GenerateUnitCells GN(pTB,m_pBox, 1, m_CellSize);
     GN.Generate();
 
@@ -185,12 +197,13 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> p)
         double area = 0;
         for (std::vector<bead*>::iterator it = B.begin() ; it != B.end(); ++it)
         {
-            area+=(p.at((*it)->GetID()))->GetArea();
+            area+=(mypoints.at((*it)->GetID()))->GetArea();
         }
         int newN =0;
-        if(m_Density!=0)
+        if(m_Density!=0 && B.size()!=0)
         newN=int(m_Density*area)+1;
-        
+      //  std::cout<<newN<<" area1 "<<m_Density<<"  "<<area<<" \n";
+
         if(newN>B.size())
         {
             newN =B.size();
@@ -200,19 +213,23 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> p)
         // === For developer, if the number of the beads are too little this will not give the exact number
         for (std::vector<bead*>::iterator it = B.begin() ; it != B.end(); ++it)
             (*it)->UpdateHasMol(false);
-            
+        
+        
+
         int accepted = 0;
         while(newN>accepted)
         for (std::vector<bead*>::iterator it = B.begin() ; it != B.end(); ++it)
         {
+
             int trand = rand()%100000000;
             double prob=double(trand)/100000000.0;
-            int id=i;
-            Vec3D X=(p.at((*it)->GetID()))->GetPos();
-            Vec3D N=(p.at((*it)->GetID()))->GetNormal();
+            double p_area = (mypoints.at((*it)->GetID()))->GetArea();
+          //  int id=i;
+            Vec3D X=(mypoints.at((*it)->GetID()))->GetPos();
+            Vec3D N=(mypoints.at((*it)->GetID()))->GetNormal();
             X=X+N*(m_H);
             (*it)->UpdatePos(X(0),X(1),X(2));
-            if(prob<ratio && newN>accepted && (*it)->Hasmol()==false)// We put 0.9 to make it withh higher chance the required number will be selected, should be modifid later
+            if(prob<p_area/area && newN>accepted && (*it)->Hasmol()==false)
             {
                 ReturnB.push_back(*(*it));
                 accepted++;
@@ -227,6 +244,7 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> p)
     }
 
     return ReturnB;
+ 
 }
 
 

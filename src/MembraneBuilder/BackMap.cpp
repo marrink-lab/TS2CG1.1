@@ -85,6 +85,9 @@ BackMap::BackMap(Argument *pArgu)
     std::vector<inclusion*>  m_pInc = ReadDTSFile.GetInclusion();
     m_point1 = ReadDTSFile.GetUpperPoints();
     m_point2 = ReadDTSFile.GetInnerPoints();
+    
+
+    
     if(m_point2.size()==0)
     m_monolayer = true;
 #if TESTMODE == Enabled
@@ -96,6 +99,17 @@ BackMap::BackMap(Argument *pArgu)
 #if TESTMODE == Enabled
     std::cout<<" Test mode: Block ID 8 \n";
 #endif
+    
+    
+    //=============== make wall; Wall info and data
+    Wall CWall = pArgu->GetWall();
+    CWall.UpdateBox(pBox);
+    CWall.CreateWall(m_point1,m_point2);
+    std::vector<bead> WB = CWall.GetWallBead();
+    std::vector<point*> WPoint = CWall.GetWallPoint();
+    //==========  We write the wall at the end
+
+    
     //********************** Finding the total area of the layers
     m_TotalAreaUp = 0.0;
     m_TotalAreaDown = 0.0;
@@ -384,15 +398,7 @@ BackMap::BackMap(Argument *pArgu)
         std::cout <<"   in the  monolayer \n";
     }
 
-    
-    //=============== Wall info and data
-    
-    Wall CWall = pArgu->GetWall();
-    CWall.UpdateBox(m_pBox);
-    CWall.CreateWall(m_point1,m_point2);
-    std::vector<bead> WB = CWall.GetWallBead();
-    std::vector<point*> WPoint = CWall.GetWallPoint();
-    
+    //=============== write the wall info
     if(WPoint.size()>0 && CWall.GetState()==true)
     {
         PDBFile pdb;
@@ -407,9 +413,8 @@ BackMap::BackMap(Argument *pArgu)
     {
         m_FinalBeads.push_back((*it));
     }
-    
-    
     //============== End Wall info and data
+
     
     WriteFinalGroFile();
     

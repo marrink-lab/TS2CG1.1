@@ -48,7 +48,7 @@ private:
   Vec3D *m_pBox;
     double m_CellSize;
 
-    std::vector<bead> MakeUniformBeads(std::vector<point*> p);
+    std::vector<bead> MakeUniformBeads(std::vector<point*> &p);
 
     
 

@@ -34,7 +34,7 @@ bool condition = true;
         else if(n<3)
         {
             condition  = false;
-            std::cout<<argument.at(0)<<"2. as a job name is wrong and does not exist \n";
+            std::cout<<argument.at(0)<<"2. unrecognized executable binary name  \n";
         }
 
     }

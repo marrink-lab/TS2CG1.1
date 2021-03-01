@@ -119,6 +119,10 @@ std::vector<point> ReadDTSFolder::ReadPointObjects(std::string file, int lay)
         check = fscanf(fdtspoins,"%d%d%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f",&id,&domainid,&area,&x,&y,&z,&nx,&ny,&nz,&p1x,&p1y,&p1z,&p2x,&p2y,&p2z,&c1,&c2);
         
 
+        if(area==0)
+        {
+            std::cout<<"point id "<<id<<"  has zero area \n";
+        }
 
         Vec3D X(x,y,z);
         Vec3D N(nx,ny,nz);
