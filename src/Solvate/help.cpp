@@ -25,7 +25,7 @@ help::help(std::string exe)
     std::cout<<"-------------------------------------------------------------------------------"<<"\n";
     std::cout<<"  -in              string       input.gro          name of the file to be solvated "<<"\n";
     std::cout<<"  -o               string       output.gro         output file name "<<"\n";
-    std::cout<<"  -cutoff          double       0.4                cutoff distance "<<"\n";
+    std::cout<<"  -Rcutoff          double       0.4                cutoff distance "<<"\n";
     std::cout<<"  -tem             string       W.gro              name of the template file for solvation"<<"\n";
 
 

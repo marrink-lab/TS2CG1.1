@@ -25,6 +25,7 @@ Argument::Argument(std::vector <std::string> argument)
     m_Renorm = false;
     m_Iter = 4;
     m_RCutOff = 0.5;
+    m_Function = "backmap";
     
     if (m_Argument.size()>3000)
     {
@@ -43,6 +44,21 @@ Argument::Argument(std::vector <std::string> argument)
             if(Arg1=="-dts")
             {
                 m_DTSFolder = m_Argument.at(i+1);
+            }
+            else if(Arg1=="-function")
+            {
+                m_Function = m_Argument.at(i+1);
+                if(m_Function=="1dsin")
+                {
+                    m_1DSinState.Lx =f.String_to_Double(m_Argument.at(i+2));
+                    m_1DSinState.Ly =f.String_to_Double(m_Argument.at(i+3));
+                    m_1DSinState.Lz =f.String_to_Double(m_Argument.at(i+4));
+                    m_1DSinState.Omega =f.String_to_Double(m_Argument.at(i+5));
+                    m_1DSinState.A =f.String_to_Double(m_Argument.at(i+6));
+                    m_1DSinState.H =f.String_to_Double(m_Argument.at(i+7));
+                    i=i+6;
+
+                }
             }
             else if(Arg1=="-defout")
             {
@@ -98,6 +114,11 @@ Argument::Argument(std::vector <std::string> argument)
             else if(Arg1=="-WallBin")
             {
                 m_Wall.UpdateCellSize(f.String_to_Double(m_Argument.at(i+1)));
+            }
+            else if(Arg1=="-WallUniform")
+            {
+                m_Wall.UpdateUniform(true);
+                i=i-1;
             }
             else if(Arg1=="-LLIB")
             {

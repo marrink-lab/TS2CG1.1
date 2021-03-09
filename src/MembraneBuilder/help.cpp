@@ -39,6 +39,8 @@ help::help(std::string exe)
      std::cout<<" -WallBName        string       WL                   Name of the Wall beads  "<<"\n";
      std::cout<<" -WallH            double       0                    Distance of the wall from the lipid head groups  "<<"\n";
      std::cout<<" -WallBin          double       3                    To make a uniform wall bead distribution we force the density of each bin is equal  "<<"\n";
+     std::cout<<" -WallUniform      -----        false                 make the wall uniform"<<"\n";
+
 
     
 

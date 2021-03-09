@@ -12,6 +12,8 @@ Wall::Wall()
     m_H = 0;
     m_BeadName = "WL";
     m_CellSize = 3;
+    m_Uniform = false;
+
 }
 Wall::~Wall()
 {
@@ -24,6 +26,10 @@ m_pBox=x;
 void Wall::UpdateState(bool x)
 {
     m_State = x;
+}
+void Wall::UpdateUniform(bool x)
+{
+    m_Uniform = x;
 }
 void Wall::UpdateCellSize(double x)
 {
@@ -184,6 +190,10 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> &mypoints)
     for (std::vector<bead>::iterator it = TB.begin() ; it != TB.end(); ++it)
         pTB.push_back(&(*it));
     
+    
+    
+  if(m_Uniform==true)
+  {
     GenerateUnitCells GN(pTB,m_pBox, 1, m_CellSize);
     GN.Generate();
 
@@ -241,6 +251,13 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> &mypoints)
             std::cout<<newN-accepted<<"   "<<accepted<<" should have been "<<newN<<"\n";
 
         
+     }
+    }
+    else
+    {
+        std::cout<<" here in the wall is ok \n";
+        for (std::vector<bead>::iterator it = TB.begin() ; it != TB.end(); ++it)
+            ReturnB.push_back(*it);
     }
 
     return ReturnB;

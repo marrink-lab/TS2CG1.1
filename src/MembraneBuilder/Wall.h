@@ -26,6 +26,7 @@ public:
 public:
   void UpdateBox(Vec3D *x);
   void UpdateState(bool x);
+  void UpdateUniform(bool x);
   void UpdateH(double x);
   void UpdateDen(double x);
   void UpdateBeadName(std::string x);
@@ -38,6 +39,7 @@ public:
 
 
 private:
+    bool m_Uniform;
     std::vector<bead> m_AllWallBeads;
     std::vector<point*> m_AllWallPoints;
 
@@ -47,7 +49,6 @@ private:
   std::string m_BeadName;
   Vec3D *m_pBox;
     double m_CellSize;
-
     std::vector<bead> MakeUniformBeads(std::vector<point*> &p);
 
     

@@ -5,7 +5,7 @@
 #include "Job.h"
 #include "Nfunction.h"
 #include "BackMap.h"
-
+#include "Shape_1DSinBuilder.h"
 Job::Job(std::vector <std::string> argument)
 {
 
@@ -17,6 +17,8 @@ Argument a(argument);
     char L1 = exacutable.at(n-1);
     char L2 = exacutable.at(n-2);
     char L3 = exacutable.at(n-3);
+    
+    std::string function = a.GetFunction();
     bool condition = true;
 if(a.GetHealth()==true )
 {
@@ -34,7 +36,10 @@ if(a.GetHealth()==true )
     {
         if( L3 == 'P' && L2 == 'C' && L1 == 'G')
         {
+            if(function=="backmap")
             BackMap B(&a);
+            else if(function=="1dsin")
+            Shape_1DSinBuilder B(&a);
         }
         else if(n<3)
         {
