@@ -173,6 +173,11 @@ Solvate::Solvate(Argument *pArg)
             TemGro.RenewBeads(PreBeads);
             TemGro.UpdateBox(*FBox);
             TemGro.WriteGroFile(outgrofilename);
+            
+            std::ofstream info;
+            info.open("info.txt");
+            info<<"W    "<<FullWaterBead.size()<<"\n";
+
         }
         
         
