@@ -496,7 +496,7 @@ double Shape_1DSinBuilder::CalculateArea_MakePoints(int layer, double APL)
     double area = 0;
     double pi = acos(-1);
     double omega = double(N)*2*pi/((*m_pBox)(0));
-    double dt = 0.001;
+    double dt = 0.0001/(*m_pBox)(1);
     int Nup = int((*m_pBox)(0)/dt+H/(2*dt))+1;
     int Ndown = int(H/(2*dt))+1;
     std::vector<Vec3D> Pos,NormalV,T1vec,T2vec;
