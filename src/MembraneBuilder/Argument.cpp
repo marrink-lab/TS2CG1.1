@@ -30,7 +30,7 @@ Argument::Argument(std::vector <std::string> argument)
     log.open("pcg.log");
     for (long i=0;i<m_Argument.size();i++)
     {
-        std::cout<<m_Argument.at(i)<<"  ";
+        log<<m_Argument.at(i)<<"  ";
     }
     if (m_Argument.size()>3000)
     {

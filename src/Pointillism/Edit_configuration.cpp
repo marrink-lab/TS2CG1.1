@@ -65,7 +65,7 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
     log.open("plm.log");
     for (long i=0;i<Arguments.size();i++)
     {
-        std::cout<<Arguments.at(i)<<"  ";
+        log<<Arguments.at(i)<<"  ";
     }
 // read the arguments in the command line and update the variables
     if (Arguments.size() == 2 && Arguments.at(1)=="-h")
