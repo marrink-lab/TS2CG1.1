@@ -54,7 +54,6 @@ void Domain::Configure(bool renorm)
         
     }
 
-    
     if(renorm==true)
     {
         std::cout<<"--> You have asked for rerenormalization of the lipid ratio. The new values are \n";
@@ -74,6 +73,9 @@ void Domain::Configure(bool renorm)
     
     double avAP = 0;
     // update the max no lipid of each lipid type in the domain
+    //**************
+    //************  Ratio_new_lipid = ratio/(ratio*a1+ratio*a2+......)
+    //******************
     for ( std::vector<DomainLipid>::iterator it = m_AllDomainLipids.begin(); it != m_AllDomainLipids.end(); it++ )
     {
         avAP+= ((*it).Ap)*((*it).Ratio);

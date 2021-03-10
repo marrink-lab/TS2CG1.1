@@ -173,10 +173,12 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> &mypoints)
         double p_area = (*it)->GetArea();
       
         
-        
         Vec3D X=(*it)->GetPos();
-        //Vec3D N=(p.at((*it)->GetID()))->GetNormal();
-       // X=X+N*(m_H);
+        /*if(m_Uniform==false)
+        {
+        Vec3D N=(*it)->GetNormal();
+        X=X+N*(m_H);
+        }*/
         bead  tb(i, m_BeadName, m_BeadName, "Wall", resid,X(0), X(1),X(2));
         TB.push_back(tb);
         i++;
@@ -257,7 +259,11 @@ std::vector<bead> Wall::MakeUniformBeads(std::vector<point*> &mypoints)
     {
         std::cout<<" here in the wall is ok \n";
         for (std::vector<bead>::iterator it = TB.begin() ; it != TB.end(); ++it)
+        {
+
             ReturnB.push_back(*it);
+            
+        }
     }
 
     return ReturnB;

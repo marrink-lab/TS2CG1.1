@@ -73,6 +73,10 @@ private:
     double    m_TotalAreaDown ;
     double    m_AvailPointUp ;
     double    m_AvailPointDown ;
+    double    m_APLLipids ;
+    double    m_APLWall ;
+
+
     bool m_monolayer;
     std::vector<point>  m_Point1;
     std::vector<point>  m_Point2;

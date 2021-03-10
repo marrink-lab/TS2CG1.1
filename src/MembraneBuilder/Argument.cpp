@@ -56,7 +56,10 @@ Argument::Argument(std::vector <std::string> argument)
                     m_1DSinState.Omega =f.String_to_Double(m_Argument.at(i+5));
                     m_1DSinState.A =f.String_to_Double(m_Argument.at(i+6));
                     m_1DSinState.H =f.String_to_Double(m_Argument.at(i+7));
-                    i=i+6;
+                    
+                    m_1DSinState.APL =f.String_to_Double(m_Argument.at(i+8));
+                    m_1DSinState.APW =f.String_to_Double(m_Argument.at(i+9));
+                    i=i+8;
 
                 }
             }
@@ -172,8 +175,12 @@ Argument::Argument(std::vector <std::string> argument)
         }
         
     }
-
-
+    std::ofstream log;
+    log.open("pcg.log");
+    for (long i=0;i<m_Argument.size();i++)
+    {
+        std::cout<<m_Argument.at(i)<<"  ";
+    }
     
 }
 

@@ -35,6 +35,9 @@ Shape_1DSinBuilder::Shape_1DSinBuilder(Argument *pArgu)
     m_ResID = 1;
     m_Renormalizedlipidratio = pArgu->GetRenorm();
     
+    m_APLLipids = m_State.APL ;
+    m_APLWall  = m_State.APW;
+    
     m_Iter = pArgu->GetIter();
     //==========================================================================================================
     GenerateMolType  MOLTYPE(pArgu);
@@ -50,8 +53,8 @@ Shape_1DSinBuilder::Shape_1DSinBuilder(Argument *pArgu)
     m_pBox = (&m_Box);
     //********************** Finding the total area of the layers
 
-    m_TotalAreaUp = CalculateArea_MakePoints(1,0.4);
-    m_TotalAreaDown = CalculateArea_MakePoints(-1,0.4);
+    m_TotalAreaUp = CalculateArea_MakePoints(1,m_APLLipids);
+    m_TotalAreaDown = CalculateArea_MakePoints(-1,m_APLLipids);
 
     for (int i=0;i<m_Point1.size();i++)
         m_pPoint1.push_back(&(m_Point1.at(i)));
@@ -214,13 +217,16 @@ Shape_1DSinBuilder::Shape_1DSinBuilder(Argument *pArgu)
     }
 
     //=============== make wall; Wall info and data
+    Wall CWall = pArgu->GetWall();
     m_Point1.clear();
     m_pPoint1.clear();
     m_pPoint2.clear();
     m_Point2.clear();
+    m_State.H = m_State.H+CWall.GetH();
 
-    CalculateArea_MakePoints(1,0.1);
-    CalculateArea_MakePoints(-1,0.1);
+    
+    CalculateArea_MakePoints(1,m_APLWall);
+    CalculateArea_MakePoints(-1,m_APLWall);
     
     for (int i=0;i<m_Point1.size();i++)
         m_pPoint1.push_back(&(m_Point1.at(i)));
@@ -228,7 +234,6 @@ Shape_1DSinBuilder::Shape_1DSinBuilder(Argument *pArgu)
     for (int i=0;i<m_Point2.size();i++)
         m_pPoint2.push_back(&(m_Point2.at(i)));
     
-    Wall CWall = pArgu->GetWall();
     CWall.UpdateBox(m_pBox);
     CWall.CreateWall(m_pPoint1,m_pPoint2);
     std::vector<bead> WB = CWall.GetWallBead();
@@ -491,7 +496,7 @@ double Shape_1DSinBuilder::CalculateArea_MakePoints(int layer, double APL)
     double area = 0;
     double pi = acos(-1);
     double omega = double(N)*2*pi/((*m_pBox)(0));
-    double dt = 0.01;
+    double dt = 0.001;
     int Nup = int((*m_pBox)(0)/dt+H/(2*dt))+1;
     int Ndown = int(H/(2*dt))+1;
     std::vector<Vec3D> Pos,NormalV,T1vec,T2vec;

@@ -19,6 +19,7 @@ public:
     inline std::vector<bead> GetWallBead()                const  {return m_AllWallBeads;}
     inline std::vector<point*> GetWallPoint()                const  {return m_AllWallPoints;}
     inline bool GetState()                const  {return m_State;}
+    inline double GetH()                const  {return m_H;}
 
 
 

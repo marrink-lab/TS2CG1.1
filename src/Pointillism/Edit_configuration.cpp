@@ -61,6 +61,12 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
     std::string file = "TS.q";
     m_AP = 0.62;
     
+    std::ofstream log;
+    log.open("plm.log");
+    for (long i=0;i<m_Argument.size();i++)
+    {
+        std::cout<<m_Argument.at(i)<<"  ";
+    }
 // read the arguments in the command line and update the variables
     if (Arguments.size() == 2 && Arguments.at(1)=="-h")
     {

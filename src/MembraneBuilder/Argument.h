@@ -10,6 +10,8 @@ struct Shape_1DSin {
     int Omega;
     double A;
     double H;
+    double APL;
+    double APW;
     
 } ;
 class Argument

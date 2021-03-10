@@ -269,13 +269,17 @@ else if(m_health == true)
             }
              for (std::vector<bead *>::iterator it = pReferenceBeads.begin() ; it != pReferenceBeads.end(); ++it)
              {
-                 Vec3D Pos = (*it)->GetPos();
-                 int i = int (Pos(0)*double(Nx)/(*m_pBox)(0));
-                 int j = int (Pos(2)*double(Nz)/(*m_pBox)(2));
+                 double X = (*it)->GetXPos();
+                 double Z = (*it)->GetZPos();
+                 //out<<X<<"  "<<Y<<"\n";
+                 // std::cout<<(*it)->GetResName()<<"  "<<(*it)->GetBeadName()<<"\n";
+                 
+                 int i = int (X*double(Nx)/(*m_pBox)(0));
+                 int j = int (Z*double(Nz)/(*m_pBox)(2));
                  if(i>  Nx-1 || j>Nz-1)
                  {
-                     std::cout<<Pos(0)<<"   "<<Nx<<"  "<<(*m_pBox)(0)<<"\n";
-                     std::cout<<Pos(2)<<"   "<<Nz<<"  "<<(*m_pBox)(2)<<"\n";
+                     std::cout<<X<<"   "<<Nx<<"  "<<(*m_pBox)(0)<<"\n";
+                     std::cout<<Z<<"   "<<Nz<<"  "<<(*m_pBox)(2)<<"\n";
                      
                  }
                   RefMat(i,j)= RefMat(i,j)+1.0/double(pReferenceBeads.size());
