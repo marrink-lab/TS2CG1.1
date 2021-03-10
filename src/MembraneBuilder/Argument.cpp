@@ -26,7 +26,12 @@ Argument::Argument(std::vector <std::string> argument)
     m_Iter = 4;
     m_RCutOff = 0.5;
     m_Function = "backmap";
-    
+    std::ofstream log;
+    log.open("pcg.log");
+    for (long i=0;i<m_Argument.size();i++)
+    {
+        std::cout<<m_Argument.at(i)<<"  ";
+    }
     if (m_Argument.size()>3000)
     {
         std::cout << "Error: to many argument ";
@@ -175,12 +180,7 @@ Argument::Argument(std::vector <std::string> argument)
         }
         
     }
-    std::ofstream log;
-    log.open("pcg.log");
-    for (long i=0;i<m_Argument.size();i++)
-    {
-        std::cout<<m_Argument.at(i)<<"  ";
-    }
+
     
 }
 

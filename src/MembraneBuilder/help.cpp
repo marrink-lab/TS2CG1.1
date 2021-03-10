@@ -21,6 +21,9 @@ help::help(std::string exe)
     std::cout<<"while small one may require a longer energy minimization  "<<"\n";
      std::cout<<"-WallDen: Note: is a sort of Wall bead density. However, it should not be larger than 1. Larger than 1 acts as one.  "<<"\n";
      std::cout<<"To get higher denisty, you may increase -Mashno value or reduce -ap value in PLM command.   "<<"\n";
+     std::cout<<"with -function you can define some specific shape of the surface without any need to run PLM.   "<<"\n";
+     std::cout<<"with -function you can define some specific shape of the surface without any need to run PLM.   "<<"\n";
+
      std::cout<<"=========================================================================================================="<<"\n";
     std::cout<<"------------ This script convert Pointillism outputs to a CG model -------------------"<<"\n";
     std::cout<<"-------------------------------------------------------------------------------"<<"\n";
@@ -40,7 +43,7 @@ help::help(std::string exe)
      std::cout<<" -WallH            double       0                    Distance of the wall from the lipid head groups  "<<"\n";
      std::cout<<" -WallBin          double       3                    To make a uniform wall bead distribution we force the density of each bin is equal  "<<"\n";
      std::cout<<" -WallUniform      -----        false                 make the wall uniform"<<"\n";
-
+     std::cout<<" -function      line of data        no               specific shape"<<"\n";
 
     
 
