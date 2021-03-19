@@ -1,16 +1,16 @@
-  #if !defined(AFX_SHGeneric1DPBCPointMaker_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
-#define AFX_SHGeneric1DPBCPointMaker_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
+  #if !defined(AFX_FlatPointMaker_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
+#define AFX_FlatPointMaker_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
 
 #include <stdio.h>
 #include <math.h>
-#include "SHGeneric1DPBCPointMaker.h"
+#include "FlatPointMaker.h"
 #include "GroFile.h"
 #include "ReadDTSFolder.h"
 #include "GenerateUnitCells.h"
 #include "Def.h"
 #include "PDBFile.h"
 #include "GenDomains.h"
-SHGeneric1DPBCPointMaker::SHGeneric1DPBCPointMaker(Argument *pArgu)
+FlatPointMaker::FlatPointMaker(Argument *pArgu)
 {
     m_WallBox.push_back(0);
     m_WallBox.push_back(1);
@@ -40,11 +40,11 @@ SHGeneric1DPBCPointMaker::SHGeneric1DPBCPointMaker(Argument *pArgu)
     m_WallPoint2 = CalculateArea_MakePoints(-1, m_WallDensity,m_Thickness/2+Hwall,true);
 
 }
-SHGeneric1DPBCPointMaker::~SHGeneric1DPBCPointMaker()
+FlatPointMaker::~FlatPointMaker()
 {
     
 }
-std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer, double APL,double H, bool wall)
+std::vector<point> FlatPointMaker::CalculateArea_MakePoints(int layer, double APL,double H, bool wall)
 {
     std::vector<point> Cpoints;
     double dt = 0.0001/m_Box(1);
@@ -89,7 +89,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
             OLDV1 = X;
             Vec3D n = T*t2;
             n=n*(1/n.norm());
-            if(layer==1)
+            if(layer==-1)
                 n=n*(-1);
             V2.push_back(n);
             
@@ -103,8 +103,8 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
         double DZ = (V1.at(i-1))(2)-(V1.at(i))(2);
         area+=sqrt(DX*DX+DZ*DZ);
     }
-    double Lenght = area;
-    area = area*(*m_pBox)(1);
+    double Lenght = (*m_pBox)(0);
+    area = Lenght*(*m_pBox)(1);
     double DL = sqrt(APL);
     Vec3D DXOLD = V1.at(0);
     Pos.push_back(V1.at(0));
@@ -151,36 +151,22 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     return Cpoints;
 
 }
-Vec3D SHGeneric1DPBCPointMaker::F(double t, int layer,double H)
+Vec3D FlatPointMaker::F(double t, int layer,double H)
 {
     double pi = acos(-1);
     Vec3D F;
     F(0) =t;
-    F(2) = (*m_pBox)(2)/2;
-    for (std::vector<Vec3D >::iterator it = m_Modes.begin() ; it != m_Modes.end(); ++it)
-    {
-        Vec3D f;
-        double w = it->at(1)*2*pi/m_Box(0);
-        double phi =it->at(2)*pi/180;
-        F(2) = F(2)+it->at(0)*cos(w*t+phi);
-    }
+    F(2) =(*m_pBox)(2)/2;
     F = F + Normal(t)*(H*double(layer)/(Normal(t)).norm());
     return F;
 }
-Vec3D SHGeneric1DPBCPointMaker::Normal(double t)/// normal function to the mid surface at point denotaed by t
+Vec3D FlatPointMaker::Normal(double t)/// normal function to the mid surface at point denotaed by t
 {
-    double pi = acos(-1);
-    Vec3D N;
-    N(2) =-1;
-    for (std::vector<Vec3D >::iterator it = m_Modes.begin() ; it != m_Modes.end(); ++it)
-    {
-        double w = it->at(1)*2*pi/m_Box(0);
-        double phi =it->at(2)*pi/180;
-        N(0) =N(0)-w*(it->at(0))*sin(w*t+phi);
-    }
+    Vec3D N(0,0,1);
+
     return N;
 }
-void SHGeneric1DPBCPointMaker::Initialize(std::string filename)
+void FlatPointMaker::Initialize(std::string filename)
 {
     
     bool OK=true;
@@ -262,17 +248,6 @@ void SHGeneric1DPBCPointMaker::Initialize(std::string filename)
                     {
                         m_Thickness = f.String_to_Double(Line.at(1));
                         
-                    }
-                }
-                else if(Line.at(0)=="Mode")
-                {
-                    if(Line.size()<4)
-                        std::cout<<" Error: Mode information in the str file is not correct \n";
-                    else
-                    {
-                        Vec3D a(f.String_to_Double(Line.at(1)),f.String_to_Double(Line.at(2)),f.String_to_Double(Line.at(3)));
-                        m_Modes.push_back(a);
-
                     }
                 }
             }

@@ -1,5 +1,5 @@
-#if !defined(AFX_SHGeneric1DPBCPointMaker_H_884B21B8_C13D_5648_BF23_124095086234__INCLUDED_)
-#define AFX_SHGeneric1DPBCPointMaker_H_884B21B8_C13D_5648_BF23_124095086234__INCLUDED_
+#if !defined(AFX_FlatPointMaker_H_774B21B8_C13D_5648_BF23_124095086234__INCLUDED_)
+#define AFX_FlatPointMaker_H_774B21B8_C13D_5648_BF23_124095086234__INCLUDED_
 
 #include <iostream>
 #include <fstream>
@@ -28,18 +28,16 @@
  WallRange 0.2 0.8 0 0.8
  Density 0.4 0.1
  Thickness 4
- ; A  n Phi
- Mode 2    1   90
- Mode 1    2   0
  End
+ 
  */
 
-class SHGeneric1DPBCPointMaker
+class FlatPointMaker
 {
 public:
     
-	SHGeneric1DPBCPointMaker(Argument *pArgu);
-	virtual ~SHGeneric1DPBCPointMaker();
+	FlatPointMaker(Argument *pArgu);
+	virtual ~FlatPointMaker();
     
     inline  std::vector<point> GetWallPoint1()                const  {return m_WallPoint1;} // returns all the created wall beads
     inline  std::vector<point> GetWallPoint2()                const  {return m_WallPoint2;} // returns all the created wall beads
@@ -71,7 +69,6 @@ private:
     std::vector<point>  m_Point2;
     std::vector<point>  m_WallPoint1;
     std::vector<point>  m_WallPoint2;
-    std::vector<Vec3D>  m_Modes;
     Vec3D F(double t,int layer, double H);
     Vec3D Normal(double t);
 

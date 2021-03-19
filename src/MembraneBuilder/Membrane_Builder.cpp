@@ -10,6 +10,8 @@
 #include "Def.h"
 #include "PDBFile.h"
 #include "GenDomains.h"
+#include "FlatPointMaker.h"
+
 Membrane_Builder::Membrane_Builder(Argument *pArgu)
 {
     std::cout<<"==============  PCG membrane builder: from function to membrane ======================"<<"\n";
@@ -23,6 +25,17 @@ Membrane_Builder::Membrane_Builder(Argument *pArgu)
     {
         std::cout<<"shape from 1D_PBC_Fourier will be made \n";
         SHGeneric1DPBCPointMaker  Fu(pArgu);
+        m_Point1 = Fu.GetUpPoint();
+        m_Point2 = Fu.GetInPoint();
+        m_WallPoint1  = Fu.GetWallPoint1();
+        m_WallPoint2  = Fu.GetWallPoint2();
+        m_Box=Fu.GetBox();
+        m_pBox =&m_Box;
+    }
+    else if(ftype == "Flat")
+    {
+        std::cout<<"Flat bilayer will be made \n";
+        FlatPointMaker  Fu(pArgu);
         m_Point1 = Fu.GetUpPoint();
         m_Point2 = Fu.GetInPoint();
         m_WallPoint1  = Fu.GetWallPoint1();

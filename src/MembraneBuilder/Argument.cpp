@@ -32,16 +32,7 @@ Argument::Argument(std::vector <std::string> argument)
     {
         log<<m_Argument.at(i)<<"  ";
     }
-    if (m_Argument.size()>3000)
-    {
-        std::cout << "Error: to many argument ";
-        std::cout<<"\n"<<"For more information and tips execute PCG -h"<<"\n";
-        m_ArgCon=0;
-        m_Health = false;
-        
-    }
-    else
-    {
+
 
         for (long i=1;i<m_Argument.size();i=i+2)
         {
@@ -151,12 +142,6 @@ Argument::Argument(std::vector <std::string> argument)
                 {
                     m_StrFileName = m_StrFileName + "." + STRExt;
                 }
-                if (f.FileExist (m_StrFileName)!=true)
-                {
-
-                    std::cout<<" Error: str file, with name "<<m_StrFileName<<" does not exist \n";
-                    m_Health = false;
-                }
             }
             else if(Arg1=="-seed")
             {
@@ -179,9 +164,20 @@ Argument::Argument(std::vector <std::string> argument)
             }
         }
         
-    }
-
-    
+        /// checking if the defined files exists.
+        if(m_Health == true)
+        {
+            if (f.FileExist (m_StrFileName)!=true)
+            {
+                std::cout<<" Error: str file, with name . "<<m_StrFileName<<" . does not exist \n";
+                m_Health = false;
+            }
+            if (f.FileExist (m_LipidLibrary)!=true)
+            {
+                std::cout<<" Note (warning): lipid library file, is not provided, some lipids may not exist  \n";
+            }
+        }
+ 
 }
 
 
