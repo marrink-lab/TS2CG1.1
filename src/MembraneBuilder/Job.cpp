@@ -6,6 +6,8 @@
 #include "Nfunction.h"
 #include "BackMap.h"
 #include "Shape_1DSinBuilder.h"
+#include "Membrane_Builder.h"
+
 Job::Job(std::vector <std::string> argument)
 {
 
@@ -40,6 +42,8 @@ if(a.GetHealth()==true )
             BackMap B(&a);
             else if(function=="1dsin")
             Shape_1DSinBuilder B(&a);
+            else if(function=="analytical_shape")
+                Membrane_Builder B(&a);
         }
         else if(n<3)
         {

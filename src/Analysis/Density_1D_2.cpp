@@ -1,9 +1,9 @@
- #if !defined(AFX_Density_1D_CPP_7F4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
-#define AFX_Density_1D_CPP_7F4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
+ #if !defined(AFX_Density_1D_2_CPP_7F4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
+#define AFX_Density_1D_2_CPP_7F4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
 
 #include <stdio.h>
 #include <math.h>
-#include "Density_1D.h"
+#include "Density_1D_2.h"
 #include "GroFile.h"
 #include "IndexFileReader.h"
 #include  "IndexGroup.h"
@@ -11,7 +11,7 @@
 #include "PDBFile.h"
 
 
-Density_1D::Density_1D(Argument *pArgu)
+Density_1D_2::Density_1D_2(Argument *pArgu)
 {
 
 
@@ -24,7 +24,7 @@ Density_1D::Density_1D(Argument *pArgu)
     // GenerateUnitCells   GUN(m_pAllBeads,pArgu,m_pBox);
 
 std::cout<<"\n";
-std::cout<<"------------- Density_1D is running: Which mean your inputs were ok, but let see if its make sense too  -------------"<<"\n";
+std::cout<<"------------- Density_1D_2 is running: Which mean your inputs were ok, but let see if its make sense too  -------------"<<"\n";
     std::cout<<"------------- Please note: time unit is ns in this software  -------------"<<"\n";
 
 std::cout<<"\n";
@@ -127,9 +127,9 @@ Nfunction f;      // In this class there are some useful function and we can use
     double BLx =(*m_pBox)(0)/double(Nx);
     double BLz =(*m_pBox)(2)/double(Nz);
 
-    LMatrix RefMat(Nx,Nz);
-    LMatrix TargetMat(Nx,Nz);
-    LMatrix W(Nx,Nz);
+    LMatrix RefMat(Nx,2);
+    LMatrix TargetMat(Nx,2);
+    LMatrix W(Nx,2);
 
     
 
@@ -288,21 +288,25 @@ else if(m_health == true)
                  }
                   TemRefMat(i,j)= TemRefMat(i,j)+1.0;
              }
+         LMatrix M = SplitDenisty(TemTargetMat,TemRefMat);
+
          for (int i=0;i<Nx;i++)
          {
              for (int j=0;j<Nz;j++)
              {
-                 if(TemTargetMat(i,j)!=0)
+
+                 if(M(i,3)!=0)
                  {
-                     TargetMat(i,j) = TargetMat(i,j)+TemTargetMat(i,j)/TemRefMat(i,j);
-                     W(i,j)=W(i,j)+1;
+                     TargetMat(i,0) = TargetMat(i,0)+M(i,1)/M(i,3);
+                     W(i,0)=W(i,0)+1;
                  }
-                 else if(TemRefMat(i,j)!=0)
+                 if(M(i,4)!=0)
                  {
-                     W(i,j)=W(i,j)+1;
+                     TargetMat(i,1) = TargetMat(i,1)+M(i,2)/M(i,4);
+                     W(i,1)=W(i,1)+1;
                  }
+
                  // RefMat(i,j) = RefMat(i,j)/double(acceptedframe);
-                 
              }
          }
      }
@@ -314,43 +318,21 @@ else if(m_health == true)
     ///******* rescale with respect to accepted frames
     for (int i=0;i<Nx;i++)
     {
-        for (int j=0;j<Nz;j++)
-        {
-            if(TargetMat(i,j)!=0)
-            {TargetMat(i,j) = TargetMat(i,j)/W(i,j)/double(pTargetBeads.size())*double(pReferenceBeads.size());
-            RefMat(i,j) = RefMat(i,j)/W(i,j);
-            }
 
-        }
-    }
-    {
-        std::string outputfilename=targetname+"mat.dat";
-        std::ofstream output;
-        output.open(outputfilename.c_str());
-        for (int i=0;i<Nx;i++)
-        {
-            for (int j=0;j<Nz;j++)
+            if(W(i,0)!=0)
             {
-                output<<TargetMat(i,j)<<"   ";
                 
+                TargetMat(i,0) = TargetMat(i,0)/W(i,0)/double(pTargetBeads.size())*double(pReferenceBeads.size());
             }
-            output<<"\n";
-        }
-    }
-    {
-        std::string outputfilename=referencename+"mat.dat";
-        std::ofstream output;
-        output.open(outputfilename.c_str());
-        for (int i=0;i<Nx;i++)
+        if(W(i,1)!=0)
         {
-            for (int j=0;j<Nz;j++)
-            {
-                output<<RefMat(i,j)<<"   ";
-                
-            }
-            output<<"\n";
+            
+            TargetMat(i,1) = TargetMat(i,1)/W(i,1)/double(pTargetBeads.size())*double(pReferenceBeads.size());
         }
+
     }
+
+
     ///******* end rescale with respect to accepted frames
 
     
@@ -358,8 +340,6 @@ else if(m_health == true)
 }
     
     std::string gfilename = pArgu->GetGeneralOutputFilename();
-    LMatrix RefVec= SplitDenisty(RefMat);
-    LMatrix TagetVec= SplitDenisty(TargetMat);
     std::string outputfilename=gfilename+targetname+"-"+referencename+".xvg";
     std::ofstream output;
     output.open(outputfilename.c_str());
@@ -367,23 +347,22 @@ else if(m_health == true)
     output<<"#####   i     x      "<<targetname<<"updensity   "<<targetname<<"downdensity   "<<referencename<<"updensity   "<<referencename<<"downdensity   midsurfcetarget midsurfaceref "<<"\n";
     for (int i=0;i<Nx;i++)
     {
-        output<<i<<"   "<<BLx*i<<"   "<<TagetVec(i,1)<<"   "<<TagetVec(i,2)<<"    "<<RefVec(i,1)<<"   "<<RefVec(i,2)<<"  "<<BLz*TagetVec(i,0)<<"  "<<BLz*RefVec(i,0)<<"\n";
+        output<<i<<"   "<<BLx*i<<"   "<<TargetMat(i,0)<<"   "<<TargetMat(i,1)<<"\n";
     }
     
 
     
 }
-Density_1D::~Density_1D()
+Density_1D_2::~Density_1D_2()
 {
     
 }
-LMatrix Density_1D::SplitDenisty(LMatrix a)
+LMatrix Density_1D_2::SplitDenisty(LMatrix a, LMatrix ref)
 {
     int Ny = a.Csize();
     int Nx = a.Rsize();
     
-    std::cout<<Nx<<"  "<<Ny<<"\n";
-    LMatrix SplitMat(Nx,3);
+    LMatrix SplitMat(Nx,5);
 
     for (int i=0;i<Nx;i++)
     {
@@ -391,26 +370,47 @@ LMatrix Density_1D::SplitDenisty(LMatrix a)
         int ymin = 0;
         double upper = 0;
         double inner = 0;
+        double uref = 0;
+        double iref = 0;
         for (int j=0;j<Ny;j++)
         {
-            if(a(i,j)!=0 && ymin==0)
+            if(ref(i,j)!=0 && ymin==0)
                 ymin = j;
-            else if(a(i,j)!=0)
+            else if(ref(i,j)!=0)
                 ymax = j;
         }
         int mid = int(double(ymax+ymin)/2.0);
         for (int j=0;j<Ny;j++)
         {
             if(j>mid)
+            {
                 upper+= a(i,j);
+                uref+=ref(i,j);
+            }
             else
+            {
                 inner+= a(i,j);
+                iref+=ref(i,j);
+            }
+
         }
-        if(double(ymax-ymin)/double(Ny)*16.95757>7 ||double(ymax-ymin)/double(Ny)*16.95757<3)
+        if(double(ymax-ymin)/double(Ny)*16.95757>8 ||double(ymax-ymin)/double(Ny)*16.95757<2)
+        {
         std::cout<<"  not expected "<<ymax-ymin<<"   "<<Ny<<"   "<<double(ymax-ymin)/double(Ny)*16.95757<<"\n";
+            SplitMat(i,0) = 0;
+            SplitMat(i,1) = 0;
+            SplitMat(i,2) = 0;
+            SplitMat(i,3) = 0;
+            SplitMat(i,4) = 0;
+        }
+        else
+        {
         SplitMat(i,0) = mid;
         SplitMat(i,1) = upper;
         SplitMat(i,2) = inner;
+        SplitMat(i,3) = uref;
+        SplitMat(i,4) = iref;
+        }
     }
     
     

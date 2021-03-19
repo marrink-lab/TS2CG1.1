@@ -39,9 +39,7 @@ BackMap::BackMap(Argument *pArgu)
     std::cout<<"=========================================================================================================="<<"\n";
 
     Nfunction f;      // In this class there are some useful function and we can use it.
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 1 \n";
-#endif
+
 
     
     //===================== OutPut file name declaration and finding input file names ========================================
@@ -51,37 +49,27 @@ BackMap::BackMap(Argument *pArgu)
     std::string dtsfolder = pArgu->GetDTSFolder();
     std::string strfilename = pArgu->GetStructureFileName();
     m_ResID = 1;
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 2 \n";
-#endif
+
     m_Renormalizedlipidratio = pArgu->GetRenorm();
     m_Iter = pArgu->GetIter();
     double RCutOff = pArgu->GetRCutOff();     /// That will be counted as a cutoff for the protein_lipid distance
     m_InclusionDirectionType = pArgu->GetInclusionDirectionType();
     std::cout<<"The inclusion direction type is: "<<m_InclusionDirectionType<<"\n";
     //==========================================================================================================
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 3 \n";
-#endif
+
     GenerateMolType  MOLTYPE(pArgu);
     m_MoleculesType = MOLTYPE.GetMolType();
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 4 \n";
-#endif
+
     if(MOLTYPE.GetHealth()==false)
     {
         std::cout<<"-> aborted! You are allowed to try one more time. Kidding, please do not :) \n";
         std::exit(0);
         
     }
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 5 \n";
-#endif
+
     //================== Reading DTS folder to get the points ====================================================
     ReadDTSFolder ReadDTSFile(dtsfolder);
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 6 \n";
-#endif
+
     std::vector<inclusion*>  m_pInc = ReadDTSFile.GetInclusion();
     m_point1 = ReadDTSFile.GetUpperPoints();
     m_point2 = ReadDTSFile.GetInnerPoints();
@@ -90,15 +78,11 @@ BackMap::BackMap(Argument *pArgu)
     
     if(m_point2.size()==0)
     m_monolayer = true;
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 7 \n";
-#endif
+
     Vec3D *pBox= ReadDTSFile.GetBox();
     m_Box (0)=(*pBox)(0);     m_Box (1)=(*pBox)(1);     m_Box (2)=(*pBox)(2);
     m_pBox = pBox;
-#if TESTMODE == Enabled
-    std::cout<<" Test mode: Block ID 8 \n";
-#endif
+
     
     
     //=============== make wall; Wall info and data
@@ -841,6 +825,11 @@ bool BackMap::FindProteinList(std::string filename)
                 else if(str=="LipidsList")
                 {
                     lipidflag = true;
+                    proteinflag =false;
+                }
+                else if(str=="ShapeData")
+                {
+                    lipidflag = false;
                     proteinflag =false;
                 }
                 else

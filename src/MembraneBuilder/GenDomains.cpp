@@ -57,6 +57,10 @@ GenDomains::GenDomains(std::string strfilename, std::vector<point*>  point1,std:
             {
                 flag = false;
             }
+            else if(str=="ShapeData")
+            {
+                flag = false;
+            }
             else
             {
                 std::cout<<" Error: unknown command in line "<<FileLine<<" <"<<str<<"> of the "<<strfilename<< " file \n";

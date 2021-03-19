@@ -9,6 +9,7 @@
 #include "Curvature_Hist.h"
 #include "Sin_1D.h"
 #include "Density_1D.h"
+#include "Density_1D_2.h"
 
 
 Job::Job(std::vector <std::string> argument)
@@ -52,6 +53,12 @@ if(a.GetHealth()==true )
     {
         
         Density_1D B(&a);
+        
+    }
+    if( jobtype == "Density_1D_2"  )
+    {
+        
+        Density_1D_2 B(&a);
         
     }
 	else

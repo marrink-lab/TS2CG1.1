@@ -43,8 +43,8 @@ help::help(std::string exe)
      std::cout<<" -WallH            double       0                    Distance of the wall from the lipid head groups  "<<"\n";
      std::cout<<" -WallBin          double       3                    To make a uniform wall bead distribution we force the density of each bin is equal  "<<"\n";
      std::cout<<" -WallUniform      -----        false                 make the wall uniform"<<"\n";
-     std::cout<<" -function      line of data        no               specific shape"<<"\n";
-
+     std::cout<<" -function         string (or more string)        no     specific shape, (analytical_shape)"<<"\n";
+//analytical_shape
     
 
      std::cout<< "example: PCG -dts point -str input.str -seed 39234  -Bondlength 0.15 "<<"\n";

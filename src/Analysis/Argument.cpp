@@ -20,7 +20,7 @@ Argument::Argument(std::vector <std::string> argument)
     m_Seed                       = 7672;
     m_GeneralOutputFilename	 = "output";
 	m_Jump = 1;
-	m_AnalysisType= "Density_1D";
+	m_AnalysisType= "Density_1D_2";
     m_GroFileName   =   "input.gro";
     m_SoftWareVersion = SoftWareVersion;
     m_IndexFileName = "Index.ndx";
