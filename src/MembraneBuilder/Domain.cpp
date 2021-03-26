@@ -59,6 +59,7 @@ void Domain::Configure(bool renorm)
         std::cout<<"--> You have asked for rerenormalization of the lipid ratio. The new values are \n";
         for ( std::vector<DomainLipid>::iterator it = m_AllDomainLipids.begin(); it != m_AllDomainLipids.end(); it++ )
         {
+            if(totalratio!=0)
             (*it).Ratio = (*it).Ratio/totalratio;
             
             std::cout<<"--> "<<(*it).Name<<"   "<<(*it).Ratio<<"  \n";
@@ -70,7 +71,7 @@ void Domain::Configure(bool renorm)
     {
         Tarea+= (*it)->GetArea();
     }
-    
+    Tarea = Tarea*totalratio;
     double avAP = 0;
     // update the max no lipid of each lipid type in the domain
     //**************
@@ -83,7 +84,10 @@ void Domain::Configure(bool renorm)
     }
     for ( std::vector<DomainLipid>::iterator it = m_AllDomainLipids.begin(); it != m_AllDomainLipids.end(); it++ )
     {
+        if(avAP!=0)
         (*it).MaxNo= int(((*it).Ratio)*Tarea/avAP);
+        else
+        (*it).MaxNo=0;
         (*it).no_created = 0;
         //  (*it).DynamicMaxNo = (*it).MaxNo;
     }
