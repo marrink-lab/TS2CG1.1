@@ -79,8 +79,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
         Vec3D X = F(t,layer,H);
         
         
-        if(X(0)>=0 && X(0)<(*m_pBox)(0))
-        {
+
             V1.push_back(X);
             Vec3D T = X-OLDV1;
             T = T*(1/T.norm());
@@ -93,7 +92,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
                 n=n*(-1);
             V2.push_back(n);
             
-        }
+ 
         
     }
     double area = 0;
@@ -114,7 +113,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     for(int i=1;i<V1.size();i++)
     {
         Vec3D DX = DXOLD-V1.at(i);
-        if(DX.norm()>=DL)
+        if(DX.norm()>=DL &&  (V1.at(i))(0)>=0 && (V1.at(i))(0)<(*m_pBox)(0))
         {
             DXOLD = V1.at(i);
             
