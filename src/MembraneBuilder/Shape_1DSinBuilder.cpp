@@ -534,8 +534,9 @@ double Shape_1DSinBuilder::CalculateArea_MakePoints(int layer, double APL)
 ////////
 ///////////////////////
     double DL = sqrt(APL);
-   // double DL = Lenght/sqrt(APL);
 
+
+    DL = Lenght/double(int(Lenght/DL));
     Vec3D DXOLD = V1.at(0);
     Pos.push_back(V1.at(0));
     NormalV.push_back(V2.at(0));
