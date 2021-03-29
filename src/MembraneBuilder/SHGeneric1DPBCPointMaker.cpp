@@ -105,6 +105,8 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     double Lenght = area;
     area = area*(*m_pBox)(1);
     double DL = sqrt(APL);
+    DL = Lenght/double(int(Lenght/DL));
+
     Vec3D DXOLD = V1.at(0);
     Pos.push_back(V1.at(0));
     NormalV.push_back(V2.at(0));
