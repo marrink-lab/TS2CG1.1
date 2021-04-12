@@ -27,6 +27,7 @@ Membrane_Builder::Membrane_Builder(Argument *pArgu)
         SHGeneric1DPBCPointMaker  Fu(pArgu);
         m_Point1 = Fu.GetUpPoint();
         m_Point2 = Fu.GetInPoint();
+        
         m_WallPoint1  = Fu.GetWallPoint1();
         m_WallPoint2  = Fu.GetWallPoint2();
         m_Box=Fu.GetBox();

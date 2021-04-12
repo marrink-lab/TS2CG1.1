@@ -43,7 +43,7 @@ help::help(std::string version,std::string exe)
         std::cout<<"  -rescalefactor        rx,ry,rz      (1,1,1)           rescaling factor (Note: there is no guarantee to get proper surface if rx,ry,rz are not equal. "<<"\n";
         std::cout<<"  -bilayerThickness     double         3.8               bilayer thickness "<<"\n";
         std::cout<<"  -monolayer            int             0               to generate monolayer instead (1/-1)  "<<"\n";
-        std::cout<<"  -r                    string         PLM              function(PLM/check/add_pbc) "<<"\n";
+        std::cout<<"  -r                    string         PLM              function(PLM/in_out/check/add_pbc) "<<"\n";
         std::cout<<"  -o                    string         point            name of the output folder "<<"\n";
         std::cout<<"  -shape                string         no               fixed geometry (flat/other will be added soon) "<<"\n";
         std::cout<<"  -resizebox            ------         no               find a better box for the system  "<<"\n";
@@ -53,7 +53,7 @@ help::help(std::string version,std::string exe)
         std::cout<<"  -ap                   double         0.62             an approximation of lipid AP  "<<"\n";
         std::cout<<"-- Note: using Mashno [1-4], unless you know what you are doing.    "<<"\n";
         
-        std::cout<<"-- example: PLM  -TSfile Traj1.dat -bilayerThickness 4   -r PLM  -Mashno 2  -rescalefactor 3  -AlgType Type1 -o $path/point \n";
+        std::cout<<"-- example: PLM  -TSfile Traj1.dat -bilayerThickness 4   -r PLM  -Mashno 2  -rescalefactor 3 3 3 -AlgType Type1 -o $path/point \n";
 
 
         

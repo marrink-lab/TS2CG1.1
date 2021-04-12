@@ -25,6 +25,7 @@ SHGeneric1DPBCPointMaker::SHGeneric1DPBCPointMaker(Argument *pArgu)
     std::string ifilename = pArgu->GetStructureFileName();
     Initialize(ifilename);
 
+
     //=============== We need the H wall distance, and the only info needed about the wall here
     Wall CWall = pArgu->GetWall();
     double Hwall = CWall.GetH();
@@ -46,12 +47,12 @@ SHGeneric1DPBCPointMaker::~SHGeneric1DPBCPointMaker()
 std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer, double APL,double H, bool wall)
 {
     std::vector<point> Cpoints;
-    double dt = 0.0002/m_Box(0);
-    int Nup = int((*m_pBox)(0)+5*H)/dt;
-    int Ndown = int(5*H/(dt));
-    
-
+    double dt = 0.0001/m_Box(1);
+    int Nup = int((*m_pBox)(0)/dt+H/(2*dt))+1;
+    int Ndown = int(H/(2*dt))+1;
     std::vector <double> C0;  // curvature of eachh point
+    c.push_back(0);
+    c.push_back(0);
     std::vector<Vec3D> Pos,NormalV,T1vec,T2vec;
     std::vector <std::vector <double> > VecCurvature;  // curvature of eachh point
 
@@ -78,6 +79,9 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     {
         double t = i*dt;
         Vec3D X = F(t,layer,H);
+        
+        
+
             V1.push_back(X);
             Vec3D T = X-OLDV1;
             T = T*(1/T.norm());
@@ -92,7 +96,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
             
         
     }
-    //double area = 0;
+    double area = 0;
     C0.push_back(0);
     double AreaInsideBox = 0;
     for (int i=1;i<V1.size();i++)
@@ -106,31 +110,36 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
         {
            AreaInsideBox+= (V1.at(i)-V1.at(i-1)).norm();
         }
-
+        
         if(i!=(V1.size()-1))
         {
-
             double angle = 0;
+
             Vec3D Dr1 = V1.at(i)-V1.at(i-1);
             Vec3D Dr2 = V1.at(i+1)-V1.at(i);
             Vec3D TY(0,1,0);
             angle = acos(Dr2.dot(Dr1,Dr2)/(Dr1.norm()*Dr2.norm()));
-            if(TY.dot((Dr1*Dr2),TY)>0)
+            if(TY.dot((Dr1*Dr2),TY)<0)
                 angle = -angle;
             
-            double length = (Dr1).norm()+(Dr2).norm();
+            double length = (Dr2-Dr1).norm();
             curvature = 2*angle/length;
             C0.push_back(curvature);
-            
         }
+        area+=sqrt(DX*DX+DZ*DZ);
     }
     C0.push_back(0);
-    double DL = sqrt(APL);
-    DL = AreaInsideBox/double(int(AreaInsideBox/DL));
     AreaInsideBox = AreaInsideBox*(*m_pBox)(1);
-
+    double Lenght = area;
+    area = area*(*m_pBox)(1);
+    double DL = sqrt(APL);
+    DL = Lenght/double(int(Lenght/DL));
 
     Vec3D DXOLD = V1.at(0);
+    Pos.push_back(V1.at(0));
+    NormalV.push_back(V2.at(0));
+    T1vec.push_back(V3.at(0));
+    T2vec.push_back(V4.at(0));
     for(int i=1;i<V1.size();i++)
     {
         Vec3D DX = DXOLD-V1.at(i);
@@ -160,7 +169,6 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
             }
         }
     }
-
     int beadid = 0;
     double dy = sqrt(APL);
     int NY = m_Box(1)/dy;
@@ -178,13 +186,13 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
                 beadid++;
                }
         }
-
     }
-
     for (std::vector<point >::iterator it = Cpoints.begin() ; it != Cpoints.end(); ++it)
     {
-            it->UpdateArea(AreaInsideBox/double(Cpoints.size()));
+            it->UpdateArea(area/double(Cpoints.size()));
     }
+
+    
     return Cpoints;
 
 }

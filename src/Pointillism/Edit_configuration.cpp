@@ -17,6 +17,7 @@
 #include "VertexMove.h"
 #include "MakePBCTS.h"
 #include "Traj_XXX.h"
+#include "In_OR_Out.h"
 
 
 /*
@@ -63,6 +64,9 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
     
     std::ofstream log;
     log.open("plm.log");
+    
+
+    
     for (long i=0;i<Arguments.size();i++)
     {
         log<<Arguments.at(i)<<"  ";
@@ -128,17 +132,22 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
         }
         if(Arguments.at(i)=="-shape")
         {
+            
             ShapeFlag = true;
             m_Shape = Arguments.at(i+1);
+            std::cout<<"Note and warning: From version 2 of TS2CG we create flat bilayers directly using PCG script. Meaning, this functionality will be removed soon and ";
+            std::cout<<" never going to be updated. Choice is yours!!! \n ";
+
         }
 
     }
     }
-    
 
-
-    
-  if(health == true && ShapeFlag == false)
+  if(health == true && ShapeFlag == false && edittype == "in_out")
+  {
+      In_OR_Out in_out(file);
+  }
+  else if(health == true && ShapeFlag == false)
   {
       if(FileExist(file) == false)
       {
@@ -228,28 +237,18 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
         }
 
         double H=bilyaerthickness/2.0;
-        
-        
-        
         const int dir_err = system(("mkdir -p "+m_Folder).c_str());
         if (-1 == dir_err)
         {
             std::cout<<"Error: creating directory  "<<m_Folder<<"\n";
             exit(1);
         }
-
-
-        
         if(m_Shape=="flat")
         {
             MakeFlatMonolayer(1 , file, H);
             if(m_monolayer==0)
             MakeFlatMonolayer(-1 , file, H);
         }
-        
-        
-
-        
     }
     else
     {

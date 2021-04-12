@@ -29,6 +29,7 @@ bool condition = true;
     {
         if( L3 == 'P' && L2 == 'L' && L1 == 'M')
         {
+
             Edit_configuration B(argument);
         }
         else if(n<3)
