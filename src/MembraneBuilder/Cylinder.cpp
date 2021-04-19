@@ -1,16 +1,16 @@
-  #if !defined(AFX_Sphere_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
-#define AFX_Sphere_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
+  #if !defined(AFX_Cylinder_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_)
+#define AFX_Cylinder_CPP_9T4A21B7_C13C_1223_BF2E_124095086234__INCLUDED_
 
 #include <stdio.h>
 #include <math.h>
-#include "Sphere.h"
+#include "Cylinder.h"
 #include "GroFile.h"
 #include "ReadDTSFolder.h"
 #include "GenerateUnitCells.h"
 #include "Def.h"
 #include "PDBFile.h"
 #include "GenDomains.h"
-Sphere::Sphere(Argument *pArgu)
+Cylinder::Cylinder(Argument *pArgu)
 {
     m_WallBox.push_back(0);
     m_WallBox.push_back(1);
@@ -41,11 +41,11 @@ Sphere::Sphere(Argument *pArgu)
     m_WallPoint2 = CalculateArea_MakePoints(-1, m_WallDensityin,m_Thickness/2, Hwall,true);
 
 }
-Sphere::~Sphere()
+Cylinder::~Cylinder()
 {
     
 }
-std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double H, double DL, bool wall)
+std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,double H, double DL, bool wall)
 {
     std::vector<point> Cpoints;
     double pi = acos(-1);
@@ -54,15 +54,15 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     
     if(layer==1)
     {
-    Curv.push_back(1.0/(m_R+H));
-    Curv.push_back(1.0/(m_R+H)*1.0/(m_R+H));
-        TotalArea = 4*pi*(m_R+H)*(m_R+H);
+    Curv.push_back(0.5/(m_R+H));
+    Curv.push_back(0);
+        TotalArea = 2*pi*(m_R+H)*m_Box(2);
     }
     else if(layer==-1)
     {
-        Curv.push_back(1.0/(m_R-H));
-        Curv.push_back(1.0/(m_R-H)*1.0/(m_R-H));
-        TotalArea = 4*pi*(m_R-H)*(m_R-H);
+        Curv.push_back(0.5/(m_R-H));
+        Curv.push_back(0);
+        TotalArea = 2*pi*(m_R-H)*m_Box(2);
 
     }
     else
@@ -73,29 +73,34 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     int Npoints = TotalArea/APL;
     APL =  TotalArea/double(Npoints);
     int beadid = 0;
-    double DT = FindDeltaTheta(Npoints);
+    double DT = sqrt(APL);
     double T=0;
     double R=m_R+double(layer)*H;
-    for (int i=0;i<PI/DT;i++)
+    int M=m_Box(2)/DT;
+    int N=2*PI*R/DT;
+    
+    for (int j=0;j<M;j++)
     {
-        T+=DT;
-        int M=2*PI*sin(T)/DT;
-        for (int j=0;j<M;j++)
-        {
-            double Phi=DT/sin(T)*j;
-            double x=R*cos(Phi)*sin(T);
-            double y=R*sin(Phi)*sin(T);
-            double z=R*cos(T);
+    for (int i=0;i<N;i++)
+    {
+            double T=DT*double(i)/R;
+
+            double x=R*cos(T);
+            double y=R*sin(T);
+            double z=double(j)*DT;
             
             Vec3D Pos(x,y,z);
-            Vec3D N=Pos*(double(layer)/Pos.norm());
-            Vec3D BoxC(m_Box(0)/2, m_Box(1)/2, m_Box(2)/2 );
+            Vec3D N=Pos;
+            N(2)=0;
+            N=N*(double(layer)/N.norm());
+            Vec3D BoxC(m_Box(0)/2, m_Box(1)/2, 0 );
             Pos=BoxC+Pos+N*(DL);
             
-            Vec3D P1(1,0,0);
-            Vec3D P2(0,1,1);
-            
-            
+            Vec3D P2(0,0,1);
+            Vec3D P1=N*P2;
+            std::cout<<P1(0)<<"  "<<P1(1)<<"  "<<P1(2)<<"   "<<P1.norm()<<"  \n";
+            std::cout<<N(0)<<"  "<<N(1)<<"  "<<N(2)<<"   "<<N.dot(P2,N)<<"  \n";
+
             point p(beadid, APL, Pos, N, P1, P2 , Curv);
             Cpoints.push_back(p);
             beadid++;
@@ -112,33 +117,7 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     return Cpoints;
 
 }
-double Sphere::FindDeltaTheta(int N)
-{
-    
-    double deltaTheta=PI/2;
-    int TotPoint=0;
-    int s=2;
-    
-    while(true)
-    {
-        int M=PI/deltaTheta;
-        TotPoint =0;
-        for (int i=0;i<M;i++)
-            TotPoint+=2*PI*sin(i*deltaTheta)/deltaTheta;
-        
-        if(TotPoint>N)
-            break;
-        else
-        {
-            s++;
-            deltaTheta=PI/s;
-        }
-        
-    }
-    
-    return deltaTheta;
-}
-void Sphere::Initialize(std::string filename)
+void Cylinder::Initialize(std::string filename)
 {
     
     bool OK=true;

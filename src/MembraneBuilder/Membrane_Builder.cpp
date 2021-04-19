@@ -12,6 +12,9 @@
 #include "GenDomains.h"
 #include "FlatPointMaker.h"
 #include "Sphere.h"
+#include "Cylinder.h"
+
+
 
 Membrane_Builder::Membrane_Builder(Argument *pArgu)
 {
@@ -49,6 +52,17 @@ Membrane_Builder::Membrane_Builder(Argument *pArgu)
     {
         std::cout<<"vesicle will be made \n";
         Sphere  Fu(pArgu);
+        m_Point1 = Fu.GetUpPoint();
+        m_Point2 = Fu.GetInPoint();
+        m_WallPoint1  = Fu.GetWallPoint1();
+        m_WallPoint2  = Fu.GetWallPoint2();
+        m_Box=Fu.GetBox();
+        m_pBox =&m_Box;
+    }
+    else if(ftype == "Cylinder")
+    {
+        std::cout<<"vesicle will be made \n";
+        Cylinder  Fu(pArgu);
         m_Point1 = Fu.GetUpPoint();
         m_Point2 = Fu.GetInPoint();
         m_WallPoint1  = Fu.GetWallPoint1();
