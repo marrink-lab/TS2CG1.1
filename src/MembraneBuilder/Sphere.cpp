@@ -56,13 +56,13 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     {
     Curv.push_back(1.0/(m_R+H));
     Curv.push_back(1.0/(m_R+H)*1.0/(m_R+H));
-        TotalArea = 2*pi*(m_R+H)*(m_R+H);
+        TotalArea = 4*pi*(m_R+H)*(m_R+H);
     }
     else if(layer==-1)
     {
         Curv.push_back(1.0/(m_R-H));
         Curv.push_back(1.0/(m_R-H)*1.0/(m_R-H));
-        TotalArea = 2*pi*(m_R-H)*(m_R-H);
+        TotalArea = 4*pi*(m_R-H)*(m_R-H);
 
     }
     else
