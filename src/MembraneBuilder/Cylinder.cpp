@@ -21,9 +21,9 @@ Cylinder::Cylinder(Argument *pArgu)
     m_R = 5;
     m_pBox = &m_Box;
     m_Thickness = 4;
-    m_Density = 0.4;
-    m_WallDensityup = 0.6;
-    m_WallDensityin = 0.6;
+    m_Density = 2.5;
+    m_WallDensityup = 1;
+    m_WallDensityin = 1;
     std::string ifilename = pArgu->GetStructureFileName();
     Initialize(ifilename);
 
@@ -33,12 +33,12 @@ Cylinder::Cylinder(Argument *pArgu)
 
     //*********
 
-    m_Point1 = CalculateArea_MakePoints(1, m_Density,m_Thickness/2,m_DL,false);
-    m_Point2 = CalculateArea_MakePoints(-1, m_Density,m_Thickness/2,m_DL,false);
+    m_Point1 = CalculateArea_MakePoints(1, 1/m_Density,m_Thickness/2,m_DL,false);
+    m_Point2 = CalculateArea_MakePoints(-1, 1/m_Density,m_Thickness/2,m_DL,false);
 
     
-    m_WallPoint1 = CalculateArea_MakePoints(1, m_WallDensityup,m_Thickness/2,Hwall,true);
-    m_WallPoint2 = CalculateArea_MakePoints(-1, m_WallDensityin,m_Thickness/2, Hwall,true);
+    m_WallPoint1 = CalculateArea_MakePoints(1, 1/m_WallDensityup,m_Thickness/2,Hwall,true);
+    m_WallPoint2 = CalculateArea_MakePoints(-1, 1/m_WallDensityin,m_Thickness/2, Hwall,true);
 
 }
 Cylinder::~Cylinder()
