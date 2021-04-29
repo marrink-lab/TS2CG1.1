@@ -566,6 +566,8 @@ double Shape_1DSinBuilder::CalculateArea_MakePoints(int layer, double APL)
     int beadid = 0;
     double dy = sqrt(APL);
     int NY = (*m_pBox)(1)/dy;
+  //  dy = (*m_pBox)(1)/double(NY); this is good for even 
+
     APL = area/double(Pos.size()*NY);
     for (int i=0;i<Pos.size();i++)
     {

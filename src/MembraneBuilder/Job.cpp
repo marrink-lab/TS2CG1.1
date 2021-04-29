@@ -44,6 +44,10 @@ if(a.GetHealth()==true )
             Shape_1DSinBuilder B(&a);
             else if(function=="analytical_shape")
                 Membrane_Builder B(&a);
+            else
+            std::cout<<function<<" function is not regognized \n";
+
+            
         }
         else if(n<3)
         {

@@ -20,8 +20,10 @@ SHGeneric1DPBCPointMaker::SHGeneric1DPBCPointMaker(Argument *pArgu)
     m_Box(0) = 10;m_Box(1) = 10;m_Box(2) = 10;
     m_pBox = &m_Box;
     m_Thickness = 4;
-    m_Density = 0.4;
-    m_WallDensity = 0.1;
+    m_Density = 2.5;
+    m_WallDensityup = 1;
+    m_WallDensitydown = 1;
+
     std::string ifilename = pArgu->GetStructureFileName();
     Initialize(ifilename);
 
@@ -31,12 +33,12 @@ SHGeneric1DPBCPointMaker::SHGeneric1DPBCPointMaker(Argument *pArgu)
 
     //*********
 
-    m_Point1 = CalculateArea_MakePoints(1, m_Density,m_Thickness/2,false);
-    m_Point2 = CalculateArea_MakePoints(-1, m_Density,m_Thickness/2,false);
+    m_Point1 = CalculateArea_MakePoints(1, 1/m_Density,m_Thickness/2,false);
+    m_Point2 = CalculateArea_MakePoints(-1, 1/m_Density,m_Thickness/2,false);
 
     
-    m_WallPoint1 = CalculateArea_MakePoints(1, m_WallDensity,m_Thickness/2+Hwall,true);
-    m_WallPoint2 = CalculateArea_MakePoints(-1, m_WallDensity,m_Thickness/2+Hwall,true);
+    m_WallPoint1 = CalculateArea_MakePoints(1, 1/m_WallDensityup,m_Thickness/2+Hwall,true);
+    m_WallPoint2 = CalculateArea_MakePoints(-1, 1/m_WallDensitydown,m_Thickness/2+Hwall,true);
 
 }
 SHGeneric1DPBCPointMaker::~SHGeneric1DPBCPointMaker()
@@ -126,7 +128,12 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     }
     C0.push_back(0);
     double DL = sqrt(APL);
-    DL = AreaInsideBox/double(int(AreaInsideBox/DL));
+    int TNx = AreaInsideBox/DL;
+    if(TNx%2!=0)
+        TNx++;
+    DL = AreaInsideBox/double(TNx);
+    
+    
     AreaInsideBox = AreaInsideBox*(*m_pBox)(1);
 
 
@@ -164,6 +171,7 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
     int beadid = 0;
     double dy = sqrt(APL);
     int NY = m_Box(1)/dy;
+    dy= m_Box(1)/double(NY);
     APL = AreaInsideBox/double(Pos.size()*NY);
     for (int i=0;i<Pos.size();i++)
     {
@@ -282,13 +290,23 @@ void SHGeneric1DPBCPointMaker::Initialize(std::string filename)
                 }
                 else if(Line.at(0)=="Density")
                 {
-                    if(Line.size()<3)
+                    if(Line.size()<2)
                         std::cout<<" Error: Density information in the str file is not correct \n";
                     else
                     {
                         m_Density = f.String_to_Double(Line.at(1));
-                        m_WallDensity = f.String_to_Double(Line.at(2));
                         
+                    }
+                }
+                else if(Line.at(0)=="WallDensity")
+                {
+                    if(Line.size()<3)
+                        std::cout<<" Error: WallDensity information in the str file is not correct \n";
+                    else
+                    {
+                        m_WallDensityup = f.String_to_Double(Line.at(1));
+                        m_WallDensitydown = f.String_to_Double(Line.at(2));
+
                     }
                 }
                 else if(Line.at(0)=="Thickness")

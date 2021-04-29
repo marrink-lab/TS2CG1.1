@@ -57,7 +57,9 @@ private:
     Vec3D  m_Box;   // system box size
     double m_Thickness;     // thickness of the membrane
     double m_Density;       // density of the lipids points, it should be smaller then the smaller area per lipids of the select lipids
-    double m_WallDensity;   // density of the wall beads. nm^-2
+    double m_WallDensityup;   // density of the wall beads. nm^-2
+    double m_WallDensitydown;   // density of the wall beads. nm^-2
+
     std::vector<double>  m_WallBox;         // a volume to have the wall beads in.
 
 private:
