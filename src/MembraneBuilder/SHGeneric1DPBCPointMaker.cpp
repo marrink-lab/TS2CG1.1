@@ -116,11 +116,28 @@ std::vector<point> SHGeneric1DPBCPointMaker::CalculateArea_MakePoints(int layer,
             Vec3D Dr1 = V1.at(i)-V1.at(i-1);
             Vec3D Dr2 = V1.at(i+1)-V1.at(i);
             Vec3D TY(0,1,0);
-            angle = acos(Dr2.dot(Dr1,Dr2)/(Dr1.norm()*Dr2.norm()));
+            
+            double cangle = Dr2.dot(Dr1,Dr2)/(Dr1.norm()*Dr2.norm());
+            
+            if(cangle>1 )
+            {
+                cangle=1;
+            }
+            else if(cangle<-1)
+            {
+             cangle=-1;
+            }
+            angle = acos(cangle);
             if(TY.dot((Dr1*Dr2),TY)>0)
                 angle = -angle;
             
             double length = (Dr1).norm()+(Dr2).norm();
+            if(length==0)
+            {
+                std::cout<<"Error: 232567 I do not know what the hell is going on \n";
+            }
+            
+            
             curvature = 2*angle/length;
             C0.push_back(curvature);
             
