@@ -86,7 +86,7 @@ void PDBFile::WritePDBFile(std::string file,std::vector<point*> p1)
     }
     std::ofstream CurFile;
     CurFile.open("Curvature_Wall.dat");
-    CurFile<<" id  X Y Z H K \n";
+    CurFile<<" id  X Y Z H K Area\n";
 
     i=0;
     for (std::vector<point*>::iterator it = p1.begin() ; it != p1.end(); ++it)
@@ -101,7 +101,7 @@ void PDBFile::WritePDBFile(std::string file,std::vector<point*> p1)
         if((*it)->GetUpperLayer()==false)
             meanC = -meanC;
         
-        CurFile<<i<<"   "<<X(0)<<"  "<<X(1)<<"  "<<X(2)<<"  "<<meanC<<"   "<<KG<<"\n";
+        CurFile<<i<<"   "<<X(0)<<"  "<<X(1)<<"  "<<X(2)<<"  "<<meanC<<"   "<<KG<<"   "<<(*it)->GetArea()<<"\n";
         i++;
 
         
