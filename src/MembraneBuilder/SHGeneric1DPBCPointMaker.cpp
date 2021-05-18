@@ -344,6 +344,11 @@ void SHGeneric1DPBCPointMaker::Initialize(std::string filename)
                     {
                         Vec3D a(f.String_to_Double(Line.at(1)),f.String_to_Double(Line.at(2)),f.String_to_Double(Line.at(3)));
                         m_Modes.push_back(a);
+                        
+                        
+                        double Frequency  = f.String_to_Double(Line.at(2));
+                        if(std::floor(Frequency)!=Frequency)
+                        std::cout<<"----> warning: provided surface is not periodic \n";
 
                     }
                 }

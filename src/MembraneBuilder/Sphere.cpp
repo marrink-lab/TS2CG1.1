@@ -60,7 +60,7 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     }
     else if(layer==-1)
     {
-        Curv.push_back(1.0/(m_R-H));
+        Curv.push_back(-1.0/(m_R-H));
         Curv.push_back(1.0/(m_R-H)*1.0/(m_R-H));
         TotalArea = 4*pi*(m_R-H)*(m_R-H);
 
@@ -80,6 +80,8 @@ std::vector<point> Sphere::CalculateArea_MakePoints(int layer, double APL,double
     {
         T+=DT;
         int M=2*PI*sin(T)/DT;
+        
+        
         for (int j=0;j<M;j++)
         {
             double Phi=DT/sin(T)*j;
@@ -135,6 +137,9 @@ double Sphere::FindDeltaTheta(int N)
         }
         
     }
+
+    int Q = PI/deltaTheta;
+    deltaTheta = PI/double(Q);
     
     return deltaTheta;
 }

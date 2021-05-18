@@ -60,7 +60,7 @@ std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,doub
     }
     else if(layer==-1)
     {
-        Curv.push_back(0.5/(m_R-H));
+        Curv.push_back(-0.5/(m_R-H));
         Curv.push_back(0);
         TotalArea = 2*pi*(m_R-H)*m_Box(2);
 
@@ -76,9 +76,12 @@ std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,doub
     double DT = sqrt(APL);
     double T=0;
     double R=m_R+double(layer)*H;
+    double DTz = DT;
     int M=m_Box(2)/DT;
     int N=2*PI*R/DT;
-    
+    DT = double(2*PI*R)/double(N);
+    DTz = double(m_Box(2))/double(M);
+
     for (int j=0;j<M;j++)
     {
     for (int i=0;i<N;i++)
@@ -87,7 +90,7 @@ std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,doub
 
             double x=R*cos(T);
             double y=R*sin(T);
-            double z=double(j)*DT;
+            double z=double(j)*DTz;
             
             Vec3D Pos(x,y,z);
             Vec3D N=Pos;
@@ -98,8 +101,8 @@ std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,doub
             
             Vec3D P2(0,0,1);
             Vec3D P1=N*P2;
-            std::cout<<P1(0)<<"  "<<P1(1)<<"  "<<P1(2)<<"   "<<P1.norm()<<"  \n";
-            std::cout<<N(0)<<"  "<<N(1)<<"  "<<N(2)<<"   "<<N.dot(P2,N)<<"  \n";
+         //   std::cout<<P1(0)<<"  "<<P1(1)<<"  "<<P1(2)<<"   "<<P1.norm()<<"  \n";
+          //  std::cout<<N(0)<<"  "<<N(1)<<"  "<<N(2)<<"   "<<N.dot(P2,N)<<"  \n";
 
             point p(beadid, APL, Pos, N, P1, P2 , Curv);
             Cpoints.push_back(p);
