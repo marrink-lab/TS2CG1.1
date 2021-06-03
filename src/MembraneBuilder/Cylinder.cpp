@@ -90,7 +90,7 @@ std::vector<point> Cylinder::CalculateArea_MakePoints(int layer, double APL,doub
 
             double x=R*cos(T);
             double y=R*sin(T);
-            double z=double(j)*DTz;
+            double z=(double(j)+0.5*(i%2))*DTz;
             
             Vec3D Pos(x,y,z);
             Vec3D N=Pos;
