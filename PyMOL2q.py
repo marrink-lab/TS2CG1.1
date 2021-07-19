@@ -24,7 +24,7 @@ Program and Pymol module for visualizing q/tsi files
 
 
 from pymol import cmd
-from pymol.cgo import *
+from pymol.cgo import *    
 
 import numpy as np
 
@@ -48,6 +48,27 @@ def read_section(stream, dtype=float):
     n = int(stream.readline().split()[-1])
     if n:
         return np.loadtxt([stream.readline() for _ in range(n)], dtype=dtype)
+    return
+
+def read_vertex(stream, dtype=float):
+    """
+    Read a section from a (q/tsi) file as a numpy array.
+
+    The q/tsi files have array sections, preceded by the number of entries.
+    This function reads one such section from an open stream.
+
+    Parameters
+    ----------
+    stream: an open file stream
+    dtype: type for array
+
+    Returns
+    -------
+    Numpy array
+    """
+    n = int(stream.readline().split()[-1])
+    if n:
+        return np.loadtxt([stream.readline() for _ in range(n)], dtype=dtype,usecols = (0, 1, 2,3))
     return
 
 
@@ -92,10 +113,11 @@ def readtsi(filename):
         box: str
     """
     with open(filename) as tsi:
-        timestep = tsi.readline()
+        version = tsi.readline()
+	timestep = 100
         while timestep:
             box = tsi.readline()
-            vertices = read_section(tsi)[:, 1:]
+            vertices = read_vertex(tsi)[:, 1:]
             triangles = read_section(tsi, dtype=int)[:, 1:]
             inclusions = read_section(tsi)
             yield float(timestep), vertices, triangles, inclusions, box
