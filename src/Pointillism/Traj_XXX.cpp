@@ -16,7 +16,7 @@ Traj_XXX::~Traj_XXX()
 {
     
 }
-void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* > pver, std::vector< triangle* > ptriangle,  std::vector< inclusion* > pinc)
+/*void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* > pver, std::vector< triangle* > ptriangle,  std::vector< inclusion* > pinc)
 {
     FILE * output;
     output = fopen((filename).c_str(), "w");
@@ -48,6 +48,41 @@ void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* 
     
     fclose(output);
 
+}*/
+void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* > pver, std::vector< triangle* > ptriangle,  std::vector< inclusion* > pinc)
+{
+    FILE * output;
+    output = fopen((filename).c_str(), "w");
+    std::string format = "%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+    const char* version="version 1.1";
+    fprintf(output,"%s\n",version);
+//------
+    const char* box="box";
+    fprintf(output,"%s%18.10lf%18.10lf%18.10lf\n",box,(*m_pBox)(0),(*m_pBox)(1),(*m_pBox)(2));
+
+    const char* ver="vertex";
+    int size=pver.size();
+    fprintf(output,"%s%20d\n",ver,size);
+    format = "%5d%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+    for (std::vector<vertex *>::iterator it = pver.begin() ; it != pver.end(); ++it)
+        fprintf(output,format.c_str(),(*it)->GetVID(),(*it)->GetVXPos(),(*it)->GetVYPos(),(*it)->GetVZPos());
+    
+    const char* tri="triangle";
+    size = ptriangle.size();
+    fprintf(output,"%s%20d\n",tri,size);
+    for (std::vector<triangle *>::iterator it = ptriangle.begin() ; it != ptriangle.end(); ++it)
+        fprintf(output,"%5d%5d%5d%5d\n",(*it)->GetTriID(),((*it)->GetV1())->GetVID(),((*it)->GetV2())->GetVID(),((*it)->GetV3())->GetVID());
+    
+    
+    const char* inc="inclusion";
+    size = pinc.size();
+    fprintf(output,"%s%20d\n",inc,size);
+    format = "%5d%5d%5d%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+    for (std::vector<inclusion *>::iterator it = pinc.begin() ; it != pinc.end(); ++it)
+        fprintf(output,format.c_str(),(*it)->GetID(),(*it)->GetTypeID(),((*it)->Getvertex())->GetVID(),((*it)->GetLDirection())(0),((*it)->GetLDirection())(1));
+    
+    fclose(output);
+    
 }
 void Traj_XXX::ReadTSI(std::string filename)
 {
@@ -72,7 +107,7 @@ void Traj_XXX::ReadTSI(std::string filename)
             version = S.at(1);
         }
     }
-    
+    input.close();
     if(version=="0.0")
     {
         ReadTSI1(filename);
