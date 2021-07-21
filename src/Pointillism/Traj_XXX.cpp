@@ -71,13 +71,13 @@ void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* 
     size = ptriangle.size();
     fprintf(output,"%s%20d\n",tri,size);
     for (std::vector<triangle *>::iterator it = ptriangle.begin() ; it != ptriangle.end(); ++it)
-        fprintf(output,"%5d%5d%5d%5d\n",(*it)->GetTriID(),((*it)->GetV1())->GetVID(),((*it)->GetV2())->GetVID(),((*it)->GetV3())->GetVID());
+        fprintf(output,"%10d%10d%10d%10d\n",(*it)->GetTriID(),((*it)->GetV1())->GetVID(),((*it)->GetV2())->GetVID(),((*it)->GetV3())->GetVID());
     
     
     const char* inc="inclusion";
     size = pinc.size();
     fprintf(output,"%s%20d\n",inc,size);
-    format = "%5d%5d%5d%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+    format = "%10d%10d%10d%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
     for (std::vector<inclusion *>::iterator it = pinc.begin() ; it != pinc.end(); ++it)
         fprintf(output,format.c_str(),(*it)->GetID(),(*it)->GetTypeID(),((*it)->Getvertex())->GetVID(),((*it)->GetLDirection())(0),((*it)->GetLDirection())(1));
     
