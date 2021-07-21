@@ -1,0 +1,1 @@
+/coarse/weria/Projects/TS_Martini_Development/TS2CG1.1/PCG  -str  One_D_Fourier.str  -Bondlength  0.3  -LLIB  Martini2.LIB  -function  analytical_shape  

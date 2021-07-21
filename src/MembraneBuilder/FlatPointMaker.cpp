@@ -32,12 +32,12 @@ FlatPointMaker::FlatPointMaker(Argument *pArgu)
 
     //*********
 
-    m_Point1 = CalculateArea_MakePoints(1, m_Density,m_Thickness/2,false);
-    m_Point2 = CalculateArea_MakePoints(-1, m_Density,m_Thickness/2,false);
+    m_Point1 = CalculateArea_MakePoints(1, 1/m_Density,m_Thickness/2,false);
+    m_Point2 = CalculateArea_MakePoints(-1, 1/m_Density,m_Thickness/2,false);
 
     
-    m_WallPoint1 = CalculateArea_MakePoints(1, m_WallDensity,m_Thickness/2+Hwall,true);
-    m_WallPoint2 = CalculateArea_MakePoints(-1, m_WallDensity,m_Thickness/2+Hwall,true);
+    m_WallPoint1 = CalculateArea_MakePoints(1, 1/m_WallDensity,m_Thickness/2+Hwall,true);
+    m_WallPoint2 = CalculateArea_MakePoints(-1, 1/m_WallDensity,m_Thickness/2+Hwall,true);
 
 }
 FlatPointMaker::~FlatPointMaker()

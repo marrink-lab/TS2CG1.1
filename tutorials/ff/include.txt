@@ -1,7 +1,0 @@
-#include "ff/Martini2.1.itp"
-#include "ff/POPC.itp"
-#include "ff/POPE.itp"
-#include "ff/POPS.itp"
-#include "ff/CDL0.itp"
-#include "ff/ION.itp"
-
