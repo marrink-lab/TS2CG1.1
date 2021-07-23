@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
                Temprory.assign(argv[i]);
                argument.push_back(Temprory);
            }
-if(argc<3)
+if(argc<4)
 {
 std::cout<<"error: no tsi input and output-- two arguments are needed \n";
 }
@@ -69,7 +69,7 @@ std::cout<<" we read the vertices \n";
 
     std::vector<vertex> ver= TSI.ver;
     std::vector<inclusion> inc =TSI.inc;
-	double D = 9;
+	double D = S2D(argument.at(3));
     for (int i=0;i<inc.size();i++)
 	{
 		vertex V = ver.at(((inc.at(i)).v));
