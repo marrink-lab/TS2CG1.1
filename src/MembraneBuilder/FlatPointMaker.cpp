@@ -47,17 +47,11 @@ FlatPointMaker::~FlatPointMaker()
 std::vector<point> FlatPointMaker::CalculateArea_MakePoints(int layer, double APL,double H, bool wall)
 {
     std::vector<point> Cpoints;
-    double dt = 0.0001/m_Box(1);
-    int Nup = int((*m_pBox)(0)/dt+H/(2*dt))+1;
-    int Ndown = int(H/(2*dt))+1;
     std::vector <double> c;  // we set curvature to zero as it is not important for this function
     c.push_back(0);
     c.push_back(0);
     std::vector<Vec3D> Pos,NormalV,T1vec,T2vec;
     std::vector<Vec3D> V1, V2,V3,V4;
-    Vec3D OLDV1;
-    Vec3D t2(0,1,0);
-
     double xmin = 0;
     double ymin = 0;
     double xmax = (*m_pBox)(0);
@@ -69,102 +63,62 @@ std::vector<point> FlatPointMaker::CalculateArea_MakePoints(int layer, double AP
         xmax = (m_WallBox.at(1))*((*m_pBox)(0));
         ymin = (m_WallBox.at(2))*((*m_pBox)(1));
         ymax = (m_WallBox.at(3))*((*m_pBox)(1));
-
-
+        
+        
     }
-    
-    for (int i=-Ndown;i<Nup;i++)
+    double area = (*m_pBox)(0)*(*m_pBox)(1);
+    double Lenght = (*m_pBox)(0);
+    double DL = sqrt(APL);
+    double Nx = int((*m_pBox)(0)/DL)+1;
+    double Ny = int((*m_pBox)(1)/DL)+1;
+    double dx = (*m_pBox)(0)/double(Nx);
+    double dy = (*m_pBox)(1)/double(Ny);
+
+    for (int i=0;i<Nx;i++)
     {
-        double t = i*dt;
-        Vec3D X = F(t,layer,H);
-        
-        
-        if(X(0)>=0 && X(0)<(*m_pBox)(0))
+        double x = dx*double(i);
+        for (int j=0;j<Ny;j++)
         {
+            double y = dy*double(j);
+
+            Vec3D X (x,y,layer*H);
             V1.push_back(X);
-            Vec3D T = X-OLDV1;
-            T = T*(1/T.norm());
-            V3.push_back(T);
-            V4.push_back(t2);
-            OLDV1 = X;
-            Vec3D n = T*t2;
-            n=n*(1/n.norm());
-            if(layer==-1)
-                n=n*(-1);
-            V2.push_back(n);
-            
+            Vec3D T1(double(1+layer)/2,double(1-layer)/2,0);
+            Vec3D T2(double(1-layer)/2,double(1+layer)/2,0);
+            Vec3D N(0,0,layer);
+            V3.push_back(T1);
+            V4.push_back(T2);
+            V2.push_back(N);
+
         }
         
+        
     }
-    double area = 0;
-    for (int i=1;i<V1.size();i++)
+    for(int i=0;i<V1.size();i++)
     {
-        double DX = (V1.at(i-1))(0)-(V1.at(i))(0);
-        double DZ = (V1.at(i-1))(2)-(V1.at(i))(2);
-        area+=sqrt(DX*DX+DZ*DZ);
-    }
-    double Lenght = (*m_pBox)(0);
-    area = Lenght*(*m_pBox)(1);
-    double DL = sqrt(APL);
-    Vec3D DXOLD = V1.at(0);
-    Pos.push_back(V1.at(0));
-    NormalV.push_back(V2.at(0));
-    T1vec.push_back(V3.at(0));
-    T2vec.push_back(V4.at(0));
-    for(int i=1;i<V1.size();i++)
-    {
-        Vec3D DX = DXOLD-V1.at(i);
-        if(DX.norm()>=DL)
-        {
-            DXOLD = V1.at(i);
-            
             Pos.push_back(V1.at(i));
             NormalV.push_back(V2.at(i));
             T1vec.push_back(V3.at(i));
             T2vec.push_back(V4.at(i));
-        }
     }
     int beadid = 0;
-    double dy = sqrt(APL);
-    int NY = m_Box(1)/dy;
-    APL = area/double(Pos.size()*NY);
     for (int i=0;i<Pos.size();i++)
     {
-        for (int j=0;j<NY;j++)
-        {
-                double y=(double(j))*dy+0.5*double(i%2)*dy;
-                (Pos.at(i))(1) = y;
-               if((Pos.at(i))(0)>=xmin && (Pos.at(i))(0)<=xmax && y>=ymin && y<=ymax)
-               {
+            if((Pos.at(i))(0)>=xmin && (Pos.at(i))(0)<=xmax && (Pos.at(i))(1)>=ymin && (Pos.at(i))(1)<=ymax)
+            {
                 point p(beadid, APL, Pos.at(i), NormalV.at(i), T1vec.at(i), T2vec.at(i) , c );
                 Cpoints.push_back(p);
                 beadid++;
-               }
-        }
+            }
     }
     for (std::vector<point >::iterator it = Cpoints.begin() ; it != Cpoints.end(); ++it)
     {
-            it->UpdateArea(area/double(Cpoints.size()));
+        it->UpdateArea(area/double(Cpoints.size()));
     }
-
+    
     
     return Cpoints;
-
-}
-Vec3D FlatPointMaker::F(double t, int layer,double H)
-{
-    double pi = acos(-1);
-    Vec3D F;
-    F(0) =t;
-    F(2) =(*m_pBox)(2)/2;
-    F = F + Normal(t)*(H*double(layer)/(Normal(t)).norm());
-    return F;
-}
-Vec3D FlatPointMaker::Normal(double t)/// normal function to the mid surface at point denotaed by t
-{
-    Vec3D N(0,0,1);
-
-    return N;
+    
 }
 void FlatPointMaker::Initialize(std::string filename)
 {
