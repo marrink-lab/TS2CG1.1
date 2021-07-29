@@ -25,6 +25,11 @@ std::string Nfunction::Int_to_String(double ConInt)
     //std::cout<<StrCon<<"\n";
     return StrCon;
 }
+bool Nfunction::FileExist (const std::string& name)
+{
+    std::ifstream f(name.c_str());
+    return f.good();
+}
 void Nfunction::CleanFiles()
 {
     

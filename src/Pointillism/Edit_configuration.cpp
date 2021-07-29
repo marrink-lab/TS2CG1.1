@@ -72,65 +72,65 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
         log<<Arguments.at(i)<<"  ";
     }
 // read the arguments in the command line and update the variables
-    if (Arguments.size() == 2 && Arguments.at(1)=="-h")
-    {
-            help helpmessage(SoftWareVersion, Arguments.at(0));
-            health = false;
-    }
-    else {
     for (int i=1;i<Arguments.size();i=i+2)
     {
         if(Arguments.at(i)=="-TSfile")
         {
             file=Arguments.at(i+1);    // ts file name, *.q, *.tsi, *.dat
+            
         }
-        if(Arguments.at(i)=="-bilayerThickness")
+        else if(Arguments.at(i)=="-h")
+        {
+            help helpmessage(SoftWareVersion, Arguments.at(0));
+            health = false;
+        }
+        else if(Arguments.at(i)=="-bilayerThickness")
         {
             bilyaerthickness=f.String_to_Double(Arguments.at(i+1));  //bilayer thickness
         }
-        if(Arguments.at(i)=="-AlgType")
+        else if(Arguments.at(i)=="-AlgType")
         {
             m_MosAlType=(Arguments.at(i+1));  // algorithm type, Type1 and Type2
         }
-        if(Arguments.at(i)=="-rescalefactor")
+        else if(Arguments.at(i)=="-rescalefactor")
         {
             m_Zoom(0)=f.String_to_Double(Arguments.at(i+1));
             m_Zoom(1)=f.String_to_Double(Arguments.at(i+2));
             m_Zoom(2)=f.String_to_Double(Arguments.at(i+3));
             i=i+2;
         }
-        if(Arguments.at(i)=="-ap")
+        else if(Arguments.at(i)=="-ap")
         {
             m_AP=f.String_to_Double(Arguments.at(i+1));
         }
-        if(Arguments.at(i)=="-Mashno")
+        else if(Arguments.at(i)=="-Mashno")
         {
             m_Iteration=f.String_to_Int(Arguments.at(i+1));
         }
-        if(Arguments.at(i)=="-r")
+        else if(Arguments.at(i)=="-r")
         {
             edittype=Arguments.at(i+1);
         }
-        if(Arguments.at(i)=="-o")
+        else if(Arguments.at(i)=="-o")
         {
             m_Folder=Arguments.at(i+1);
         }
-        if(Arguments.at(i)=="-smooth")
+        else if(Arguments.at(i)=="-smooth")
         {
             m_smooth=true;
             i=i-1;
         }
-        if(Arguments.at(i)=="-resizebox")
+        else if(Arguments.at(i)=="-resizebox")
         {
             m_FindnewBox=true;
             i=i-1;
         }
-        if(Arguments.at(i)=="-monolayer")
+        else if(Arguments.at(i)=="-monolayer")
         {
             m_monolayer=f.String_to_Int(Arguments.at(i+1));
             bilyaerthickness = 0;
         }
-        if(Arguments.at(i)=="-shape")
+        else if(Arguments.at(i)=="-shape")
         {
             
             ShapeFlag = true;
@@ -139,10 +139,19 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
             std::cout<<" never going to be updated. Choice is yours!!! \n ";
 
         }
+        else
+        {
+            std::cout<<"error: unrecognized argument || "<<Arguments.at(i)<<" || \n";
+            health = false;
+        }
 
     }
+    if(health==true && f.FileExist(file)==false)
+    {
+        std::cout<<"error: ts file with the name "<<file<<" does not exist in the folder \n";
+        health = false;
     }
-
+//// do the jobs
   if(health == true && ShapeFlag == false && edittype == "in_out")
   {
       In_OR_Out in_out(file);
@@ -250,7 +259,7 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
             MakeFlatMonolayer(-1 , file, H);
         }
     }
-    else
+    else if (health == true)
     {
         std::cout<<" unrecognized edit type \n";
     }

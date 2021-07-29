@@ -20,6 +20,7 @@ void Change_Line();
     void Write_One_ErrorMessage(std::string);
     void CleanFiles();
     std::vector<std::string> split(std::string str);
+    bool FileExist (const std::string& name);
 
 bool isEven(int x);
 private :
