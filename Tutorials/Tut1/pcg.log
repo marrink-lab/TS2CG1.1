@@ -1,0 +1,1 @@
+../../PCG  -dts  point  -str  input.str  -LLIB  Martini3.LIB  -Bondlength  0.4  

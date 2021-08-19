@@ -49,7 +49,7 @@ Traj_XXX::~Traj_XXX()
     fclose(output);
 
 }*/
-void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* > pver, std::vector< triangle* > ptriangle,  std::vector< inclusion* > pinc)
+void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* > pver, std::vector< triangle* > ptriangle,  std::vector< inclusion* > pinc , std::vector< exclusion* > pexc)
 {
     FILE * output;
     output = fopen((filename).c_str(), "w");
@@ -80,6 +80,19 @@ void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* 
     format = "%10d%10d%10d%"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
     for (std::vector<inclusion *>::iterator it = pinc.begin() ; it != pinc.end(); ++it)
         fprintf(output,format.c_str(),(*it)->GetID(),(*it)->GetTypeID(),((*it)->Getvertex())->GetVID(),((*it)->GetLDirection())(0),((*it)->GetLDirection())(1));
+    
+    if(pexc.size()!=0)
+    {
+        const char* exc="exclusion";
+        size = pinc.size();
+        fprintf(output,"%s%20d\n",exc,size);
+        format = "%10d%10d%18.10lf"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+        for (std::vector<exclusion *>::iterator it = pexc.begin() ; it != pexc.end(); ++it)
+        fprintf(output,format.c_str(),(*it)->GetID(),((*it)->Getvertex())->GetVID(),(*it)->GetRadius());
+    }
+    
+    
+    
     
     fclose(output);
     
@@ -143,7 +156,9 @@ void Traj_XXX::ReadTSI2(std::string filename)
     Nfunction f;
     std::ifstream input;
     input.open(filename.c_str());
-
+    (*m_pBox)(0) = 100;
+    (*m_pBox)(1) = 100;
+    (*m_pBox)(2) = 100;
     while (true)
     {
         input>>str;
@@ -282,6 +297,41 @@ void Traj_XXX::ReadTSI2(std::string filename)
             }
 
         }
+        else if(str=="exclusion")
+        {
+            input>>ninc;
+            getline(input,str);
+            
+            int id,vid,r;
+            for (int i=0;i<ninc;i++)
+            {
+                getline(input,str);
+                std::vector<std::string> S = f.split(str);
+                if(S.size()<3)
+                {
+                    std::cout<<"error ---> information of the inclusion "<<i<<" is not sufficent in the tsi file \n";
+                    m_Condition =false;
+                    
+                    std::cout<<str<<" \n";
+                    
+                    break;
+                }
+                else
+                {
+                    id=f.String_to_Int(S.at(0));
+                    vid=f.String_to_Int(S.at(1));
+                    r=f.String_to_Double(S.at(2));
+          
+                    
+                    exclusion Tinc(id);
+                    Tinc.Updatevertex(&(m_Vertex.at(vid)));
+                    Tinc.UpdateRadius(r);
+                    m_Exclusion.push_back(Tinc);
+                }
+                
+            }
+            
+        }
         else
         {
             getline(input,str);
@@ -295,6 +345,11 @@ void Traj_XXX::ReadTSI2(std::string filename)
     
     for (std::vector<inclusion>::iterator it = m_Inclusion.begin() ; it != m_Inclusion.end(); ++it)
     m_pInclusion.push_back(&(*it));
+    
+    
+    for (std::vector<exclusion>::iterator it = m_Exclusion.begin() ; it != m_Exclusion.end(); ++it)
+        m_pExclusion.push_back(&(*it));
+
     //======= we finished the reading.
     for (std::vector<vertex>::iterator it = m_Vertex.begin() ; it != m_Vertex.end(); ++it)
         m_pAllV.push_back(&(*it));
@@ -419,6 +474,7 @@ void Traj_XXX::ReadTSI2(std::string filename)
     {
         ((*it)->Getvertex())->UpdateInclusion(*it);
     }
+
 
 }
 void Traj_XXX::ReadTSI1(std::string filename)

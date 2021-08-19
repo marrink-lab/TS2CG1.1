@@ -71,6 +71,8 @@ BackMap::BackMap(Argument *pArgu)
     ReadDTSFolder ReadDTSFile(dtsfolder);
 
     std::vector<inclusion*>  m_pInc = ReadDTSFile.GetInclusion();
+    std::vector<exclusion*>  m_pExc = ReadDTSFile.GetExclusion();
+
     m_point1 = ReadDTSFile.GetUpperPoints();
     m_point2 = ReadDTSFile.GetInnerPoints();
     
@@ -109,6 +111,73 @@ BackMap::BackMap(Argument *pArgu)
 
     
 
+    
+    //********* Lets exclude the points based on exclusion
+    
+    if(m_pExc.size()!=0)
+    {
+        std::cout<<" Note: we are excluding points based on exclusion, If it is slow, contact the developer \n";
+        // m_pExc
+        //m_point2
+        
+        for ( std::vector<exclusion*>::iterator it = m_pExc.begin(); it != m_pExc.end(); it++ )
+        {
+            int pointid=(*it)->GetPointID();
+            if(pointid<0 || pointid>m_point1.size())
+            std::cout<<"error 23456 \n";
+            
+            point *Up_p1=m_point1.at(pointid);
+            Vec3D Pos = Up_p1->GetPos();
+            Vec3D N = Up_p1->GetNormal();
+            double R = (*it)->GetRadius();
+            if(R!=0)
+            Up_p1->UpdateArea(0);
+
+            for ( std::vector<point*>::iterator it1 = m_point1.begin(); it1 != m_point1.end(); it1++ )
+            {
+                Vec3D Pos1 = (*it1)->GetPos();
+                Vec3D DP = Pos1-Pos;
+                double dist = DP.norm();
+                Vec3D UnitDP =DP*(1/dist);
+                double sinT = fabs((UnitDP*N).norm());
+                double cosT = fabs(N.dot(UnitDP,N));
+
+                if(dist*sinT<=R && dist*cosT<6)
+                {
+                    (*it1)->UpdateArea(0);
+
+                }
+
+                
+            }
+            for ( std::vector<point*>::iterator it1 = m_point2.begin(); it1 != m_point2.end(); it1++ )
+            {
+                Vec3D Pos1 = (*it1)->GetPos();
+                Vec3D DP = Pos1-Pos;
+                double dist = DP.norm();
+                Vec3D UnitDP =DP*(1/dist);
+                double sinT = fabs((UnitDP*N).norm());
+                double cosT = fabs(N.dot(UnitDP,N));
+
+                if(dist*sinT<=R && dist*cosT< 6)
+                {
+                    (*it1)->UpdateArea(0);
+                    
+                }
+                
+            }
+            
+
+        }
+
+        
+    }
+    
+
+    
+    //**********************
+    
+    
 
    
     //*****************************
@@ -490,11 +559,13 @@ void BackMap::GenProtein(MolType moltype, int listid, Vec3D Pos, Vec3D Normal, V
 
         //===== to fit to the protein diretion
         Vec3D LocalDir;
+    
         if(m_InclusionDirectionType=="Global")
         LocalDir = GL*Dir;
         else if(m_InclusionDirectionType=="Local")
         LocalDir = Dir;
 
+   // std::cout<<LocalDir(0)<<"  GOLB "<<LocalDir(1)<<"   "<<LocalDir(2)<<"  \n ";
 
         double C=LocalDir(0);
         double S= LocalDir(1);
@@ -618,7 +689,11 @@ void BackMap::CreateRandomInclusion()
 {
     int totinc = 0;
     int totcreated = 0;
-    std::cout<<m_TotalProteinList.size()<<" According to the data and area we generate  proteins \n";
+    
+    if(m_TotalProteinList.size()!=0)
+    {
+        std::cout<<m_TotalProteinList.size()<<" According to the data and area we generate  proteins \n";
+    }
     for ( std::map<int,ProteinList>::iterator it = m_TotalProteinList.begin(); it != m_TotalProteinList.end(); it++ )
     {
         (it->second).created = 0;
@@ -633,7 +708,6 @@ void BackMap::CreateRandomInclusion()
 
     }
     
-    std::cout<<" In total we aim at creating  "<<totinc<<"  "<<" protein of all type  \n" ;
 
     int id=0;
     int s=0;
@@ -726,9 +800,7 @@ void BackMap::CreateRandomInclusion()
         
 
     }
-
     
-    std::cout<<" we have generated random distribution of proteins, the number is  "<<m_RandomInc.size()<<"  \n";
 }
 /*void BackMap::CreateWallBead(std::vector<point*>  p1, std::vector<point*>  p2)
 {
@@ -881,14 +953,16 @@ bool BackMap::FindProteinList(std::string filename)
     
     
     
-
+    
+  if(m_TotalProteinList.size()!=0)
+  {
     std::cout<<"*************************** Protein List ID ********************** \n";
     for ( std::map<int,ProteinList>::iterator it = m_TotalProteinList.begin(); it != m_TotalProteinList.end(); it++ )
     {
         std::cout <<"*    "<< it->first  <<" ---> "<< (it->second).ProteinName<< std::endl ;
     }
     std::cout<<"************************************************************** \n";
-    
+  }
     
     return OK;
 }

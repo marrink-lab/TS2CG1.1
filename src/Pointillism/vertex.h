@@ -88,7 +88,7 @@ private:
     CNTCell * m_CNTCell;
     int m_DomainID;
     bool m_IsFullDomain;
-  int m_NetworkID;            // which molecule or cluster the vertex belong too we will change this
+    int m_NetworkID;            // which molecule or cluster the vertex belong too we will change this
 
 ////// Regarding the vertex curvature
 private:

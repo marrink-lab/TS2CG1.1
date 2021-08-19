@@ -7,6 +7,7 @@
 #include "links.h"
 #include "Vec3D.h"
 #include "inclusion.h"
+#include "exclusion.h"
 #include "Nfunction.h"
 
 class Traj_XXX
@@ -24,12 +25,14 @@ public:
         inline std::vector<links*> GetHalfLinks()                       {return m_pHL;}
         inline std::vector<links*> GetMHalfLinks()                       {return m_pMHL;}
         inline std::vector<inclusion*> GetInclusion()                       {return m_pInclusion;}
+        inline std::vector<exclusion*> GetExclusion()                       {return m_pExclusion;}
+
         inline int GetStep()                     			  {return m_Step;}
         inline bool GetCondition()                     			  {return m_Condition;}
 
 public:
 
-void WriteTSI(int step ,  std::string filename, std::vector< vertex* > pver, std::vector< triangle* > ptriangle,   std::vector< inclusion* > pinc);
+void WriteTSI(int step ,  std::string filename, std::vector< vertex* > pver, std::vector< triangle* > ptriangle,   std::vector< inclusion* > pinc, std::vector< exclusion* > pexc);
 void ReadTSI1(std::string filename);
 void ReadTSI2(std::string filename);
 void ReadTSI(std::string filename);
@@ -41,12 +44,15 @@ private:
     std::vector<triangle> m_Triangle;
     std::vector<links> m_Links;
     std::vector<inclusion>  m_Inclusion;
+    std::vector<exclusion>  m_Exclusion;
     std::vector<vertex*>      m_pAllV;
     std::vector<triangle*>    m_pAllT;
     std::vector<links*>       m_pLinks;
     std::vector<links*>       m_pHL;
     std::vector<links*>       m_pMHL;
     std::vector<inclusion*>   m_pInclusion;
+    std::vector<exclusion*>   m_pExclusion;
+
     bool m_Condition;
     Vec3D *m_pBox;
     std::string m_filename;

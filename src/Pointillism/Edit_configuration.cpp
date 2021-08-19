@@ -431,7 +431,8 @@ else if(file.at(file.size()-1)=='i' && file.at(file.size()-2)=='s' && file.at(fi
         m_pAllLinks.clear();
         m_pHalfLinks1.clear();
         m_pHalfLinks2.clear();
-        
+        m_pExc.clear();
+    
         TSI.ReadTSI(file);
         m_pAllV=TSI.GetVertex();
         m_pAllT=TSI.GetTriangle();
@@ -439,6 +440,7 @@ else if(file.at(file.size()-1)=='i' && file.at(file.size()-2)=='s' && file.at(fi
         m_pHalfLinks1=TSI.GetHalfLinks();
         m_pHalfLinks2=TSI.GetMHalfLinks();
         m_pInc=TSI.GetInclusion();
+        m_pExc=TSI.GetExclusion();
 }
 else
 {
@@ -591,7 +593,7 @@ UpdateGeometry();
         if(layer==-1)
         fi=m_Folder+"visualization_data/Lower.vtu";
         vtu.Writevtu(m_pAllV,m_pAllT,m_pAllLinks,fi);
-        TSI.WriteTSI(0,"extended.tsi",m_pAllV,m_pAllT,m_pInc);
+        TSI.WriteTSI(0,"extended.tsi",m_pAllV,m_pAllT,m_pInc,m_pExc);
     }
     
     //=============
@@ -678,6 +680,8 @@ UpdateGeometry();
 if(layer==1)
 {
     
+    
+   if (m_pInc.size()!=0){
     FILE *IncFile;
     IncFile = fopen((m_Folder+"/IncData.dat").c_str(), "w");
     
@@ -708,6 +712,39 @@ if(layer==1)
         int verid=ver->GetVID();
         fprintf(IncFile,  "%5d%5d%5d%8.3f%8.3f%8.3f\n",i,intypeid,verid,GD(0),GD(1),GD(2));
         i++;
+    }
+   }
+    //==== We write Exclusion data
+    
+    if(m_pExc.size()!=0)
+    {
+    FILE *ExcFile;
+    ExcFile = fopen((m_Folder+"/ExcData.dat").c_str(), "w");
+    
+    
+    
+    const char* CHAR1 ="< Exclusion NoExc   ";
+    NoPoints=m_pExc.size();
+    const char* CHAR2 ="   >";
+    
+    fprintf(ExcFile,  "%s%5d%s\n",CHAR1,NoPoints,CHAR2);
+    
+    const char* CHAR3 ="< id  pointid r >";
+    fprintf(ExcFile,  "%s\n",CHAR3);
+    
+    
+    
+    i=0;
+    
+    for (std::vector<exclusion *>::iterator it = m_pExc.begin() ; it != m_pExc.end(); ++it)
+    {
+        
+        vertex* ver = (*it)->Getvertex();
+        int verid=ver->GetVID();
+        double R=(*it)->GetRadius();
+        fprintf(ExcFile,  "%5d%5d%8.3f\n",i,verid,R);
+        i++;
+    }
     }
 }
     

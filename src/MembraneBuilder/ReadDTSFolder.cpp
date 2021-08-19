@@ -13,6 +13,8 @@ ReadDTSFolder::ReadDTSFolder(std::string foldername)
     std::string file1 = "./"+foldername+"/OuterBM.dat";
     std::string file2 = "./"+foldername+"/InnerBM.dat";
     std::string file3 = "./"+foldername+"/IncData.dat";
+    std::string file4 = "./"+foldername+"/ExcData.dat";
+
     bool health = true;
     bool monolayer =false;
     if(FileExist(file1) == false)
@@ -35,8 +37,14 @@ ReadDTSFolder::ReadDTSFolder(std::string foldername)
     
     if(FileExist(file3) == true)
     {
-        std::cout<<" inclusion file is provided, we will generate proteins according to this file \n";
+        std::cout<<"--> inclusion file is provided, we will generate proteins according to this file \n";
         m_Inclusion =  ReadInclusionObjects(file3);
+
+    }
+    if(FileExist(file4) == true)
+    {
+        std::cout<<"--> exclusion file is provided, meaning the system contains pores \n";
+        m_Exclusion =  ReadExclusionObjects(file4);
     }
     
     
@@ -50,6 +58,8 @@ ReadDTSFolder::ReadDTSFolder(std::string foldername)
     for (std::vector<inclusion>::iterator it = m_Inclusion.begin() ; it != m_Inclusion.end(); ++it)
         m_pInclusion.push_back(&(*it));
     
+    for (std::vector<exclusion>::iterator it = m_Exclusion.begin() ; it != m_Exclusion.end(); ++it)
+        m_pExclusion.push_back(&(*it));
     
     for (std::vector<inclusion*>::iterator it = m_pInclusion.begin() ; it != m_pInclusion.end(); ++it)
     {
@@ -188,6 +198,47 @@ std::vector<inclusion> ReadDTSFolder::ReadInclusionObjects(std::string file)
     
     
     return AllInc;
+    
+}
+std::vector<exclusion> ReadDTSFolder::ReadExclusionObjects(std::string file)
+{
+    //    exclusion(int id, int pointid, double radius );
+    
+    
+    //  char str = new str[1000];
+    
+    /// Read the header and find the number of the exclusion
+    char str1[256];
+    char str2[256];
+    
+    FILE *fdtspoins;
+    fdtspoins = fopen(file.c_str(), "r");
+    int NoPoints;
+    
+    if (fdtspoins == NULL){
+        printf(" Error: Could not open file %s",file.c_str());
+    }
+
+    int readafile = fscanf(fdtspoins,"%s%s%s%d%s",str2,str2,str2,&NoPoints,str2);
+    bool  check = fgets(str1, sizeof(str1), fdtspoins);
+    check = fgets(str1, sizeof(str1), fdtspoins);
+    ///
+    
+    std::vector<exclusion>  AllExc;
+    
+    
+    float r;
+    
+    int id,pid;
+    for (int i=0;i<NoPoints;i++)
+    {
+        readafile = fscanf(fdtspoins,"%d%d%f",&id,&pid,&r);
+        exclusion p(id,pid,r);
+        AllExc.push_back(p);
+    }
+    
+    
+    return AllExc;
     
 }
 

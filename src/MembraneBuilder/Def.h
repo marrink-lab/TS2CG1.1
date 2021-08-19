@@ -25,7 +25,7 @@
 
 
 
-#define TESTMODE Enabled
+#define TESTMODE Disabled
 #define EigenLib Disabled
 #define NoLib Enabled
 

@@ -18,7 +18,7 @@ GenerateMolType::GenerateMolType(Argument *pArgu)
     
     
 
-            std::cout<<"--> Generating molecule types from  "<<strfilename<<"  file and our library   -------------"<<"\n";
+            std::cout<<"--> Generating molecule types from  "<<strfilename<<"  file"<<"\n";
 
 
 //=======================================================
@@ -68,7 +68,7 @@ GenerateMolType::GenerateMolType(Argument *pArgu)
         m_MoleculesType = ExternalLIB.GetMolType();
         if(ExternalLIB.GetHealth()==true)
         {
-        std::cout<<"--> Note: the lipids will be generated from "<<ExternalLIB.GetLiBTitle()<<"Lipid Library, of version: "<<ExternalLIB.GetLiBVersion()<<"\n";
+        std::cout<<"--> Note: the lipids will be generated from <"<<ExternalLIB.GetLiBTitle()<<"> Lipid Library, of version: "<<ExternalLIB.GetLiBVersion()<<"\n";
         std::cout<<"--> This library contains "<<m_MoleculesType.size()<<" lipid types \n";
         }
         else
@@ -100,19 +100,14 @@ if(m_Health==true)
 
     
     
-    
-    std::cout<<" ************************************************************** \n";
-    std::cout<<" --> We have generated "<<m_MoleculesType.size()<<" mol type. "<<nolib<<" are from the included *.gro files "<<"\n";
-    std::cout<<" ************************************************************** \n";
-    std::cout<<" **** Molecule list and number of their particles are listed bellow  **** "<<"\n";
-
-   for ( std::map<std::string, MolType>::iterator it = m_MoleculesType.begin(); it != m_MoleculesType.end(); it++ )
+    if(pArgu->GetLipidLibrary()=="no")
     {
+        std::cout<<" **** Molecule list and number of their particles are listed bellow  **** "<<"\n";
+        for ( std::map<std::string, MolType>::iterator it = m_MoleculesType.begin(); it != m_MoleculesType.end(); it++ )
+        {
         std::cout <<"*    "<< it->first  <<" ---> "<< (it->second).beadnumber<<"  area of "<<(it->second).molarea<<"  nm^2"<< std::endl ;
+        }
     }
-    
-    std::cout<<" **** Do not panic, the APL might not match the value  given in the "<<strfilename<<" file. This will be corrected in next steps **** "<<"\n";
-
     
 
 }
