@@ -706,9 +706,13 @@ if(layer==1)
         int intypeid = (*it)->GetTypeID();
         vertex* ver = (*it)->Getvertex();
         Tensor2  L2G = ver->GetL2GTransferMatrix();
-       // int Rot = (*it)->GetNSymmetry();
         Vec3D LD = (*it)->GetLDirection();
+        //std::cout<<LD(0)<<" LD "<<LD(1)<<"  "<<LD(2)<<"  \n";
         Vec3D GD = L2G*LD;
+        //Tensor2  G2L = L2G.Transpose(L2G);
+        //std::cout<<GD(0)<<" GD "<<GD(1)<<"  "<<GD(2)<<"  \n";
+        //std::cout<<(G2L*GD)(0)<<" LGD "<<(G2L*GD)(1)<<"  "<<(G2L*GD)(2)<<"  \n";
+
         int verid=ver->GetVID();
         fprintf(IncFile,  "%5d%5d%5d%8.3f%8.3f%8.3f\n",i,intypeid,verid,GD(0),GD(1),GD(2));
         i++;

@@ -53,8 +53,8 @@ BackMap::BackMap(Argument *pArgu)
     m_Renormalizedlipidratio = pArgu->GetRenorm();
     m_Iter = pArgu->GetIter();
     double RCutOff = pArgu->GetRCutOff();     /// That will be counted as a cutoff for the protein_lipid distance
-    m_InclusionDirectionType = pArgu->GetInclusionDirectionType();
-    std::cout<<"The inclusion direction type is: "<<m_InclusionDirectionType<<"\n";
+    m_InclusionDirectionType = pArgu->GetInclusionDirectionType(); //Note: in the normal condition PLM always write global so only applicable if you want to change the point folder manually
+    //std::cout<<"The inclusion direction type is: "<<m_InclusionDirectionType<<"\n";
     //==========================================================================================================
 
     GenerateMolType  MOLTYPE(pArgu);
@@ -560,12 +560,12 @@ void BackMap::GenProtein(MolType moltype, int listid, Vec3D Pos, Vec3D Normal, V
         //===== to fit to the protein diretion
         Vec3D LocalDir;
     
-        if(m_InclusionDirectionType=="Global")
+        if(m_InclusionDirectionType=="Global") //Note: in the normal condition PLM always write global so only applicable if you want to change the point folder manually
         LocalDir = GL*Dir;
         else if(m_InclusionDirectionType=="Local")
         LocalDir = Dir;
 
-   // std::cout<<LocalDir(0)<<"  GOLB "<<LocalDir(1)<<"   "<<LocalDir(2)<<"  \n ";
+    std::cout<<LocalDir(0)<<"  GOLB "<<LocalDir(1)<<"   "<<LocalDir(2)<<"  \n ";
 
         double C=LocalDir(0);
         double S= LocalDir(1);
