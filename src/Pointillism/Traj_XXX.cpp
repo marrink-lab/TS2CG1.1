@@ -84,9 +84,9 @@ void Traj_XXX::WriteTSI(int step ,  std::string filename , std::vector< vertex* 
     if(pexc.size()!=0)
     {
         const char* exc="exclusion";
-        size = pinc.size();
+        size = pexc.size();
         fprintf(output,"%s%20d\n",exc,size);
-        format = "%10d%10d%18.10lf"+m_tsiPrecision+"lf%"+m_tsiPrecision+"lf\n";
+        format = "%10d%10d%"+m_tsiPrecision+"lf\n";
         for (std::vector<exclusion *>::iterator it = pexc.begin() ; it != pexc.end(); ++it)
         fprintf(output,format.c_str(),(*it)->GetID(),((*it)->Getvertex())->GetVID(),(*it)->GetRadius());
     }
