@@ -302,7 +302,8 @@ void Traj_XXX::ReadTSI2(std::string filename)
             input>>ninc;
             getline(input,str);
             
-            int id,vid,r;
+            int id,vid;
+            double r;
             for (int i=0;i<ninc;i++)
             {
                 getline(input,str);
