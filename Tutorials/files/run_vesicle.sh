@@ -36,7 +36,7 @@ done
 # use PCG to place lipids (here only POPC) except for excluded vertices
 #===============================================================================================
 
-$ts2cg/PLM  -TSfile  extended_exclusions.tsi  -bilayerThickness  3.8 -rescalefactor 1.5 1.5 1.5
+$ts2cg/PLM  -TSfile  extended_exclusions.tsi  -bilayerThickness  3.8 -rescalefactor 2 2 2
 $ts2cg/PCG  -str  $files/input.str  -Bondlength  0.2  -LLIB  $files/Martini3.LIB  -defout  system
 
 #===============================================================================================
