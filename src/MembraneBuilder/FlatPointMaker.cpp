@@ -20,8 +20,8 @@ FlatPointMaker::FlatPointMaker(Argument *pArgu)
     m_Box(0) = 10;m_Box(1) = 10;m_Box(2) = 10;
     m_pBox = &m_Box;
     m_Thickness = 4;
-    m_Density = 0.4;
-    m_WallDensity = 0.1;
+    m_Density = 2;
+    m_WallDensity = 1;
     std::string ifilename = pArgu->GetStructureFileName();
     Initialize(ifilename);
 
