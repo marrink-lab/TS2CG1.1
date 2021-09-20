@@ -93,13 +93,17 @@ void links::UpdateNormal()
     m_Normal=v1+v2;
     
 
-     
+
     
     double norm=m_Normal.norm();
     m_Normal=m_Normal*(1.0/norm);
        if(norm==0)
        {
-           std::cout<<"Links normall vector error \n";
+           std::cout<<"Links normall vector error  \n";
+           std::cout<<v1(0)<<"   "<<v1(1)<<"   "<<v1(2)<<"   \n";
+           std::cout<<v2(0)<<"   "<<v2(1)<<"   "<<v2(2)<<"   \n";
+           std::cout<<m_T1->GetTriID()<<"   "<<(m_mirorlink->GetTriangle())->GetTriID()<<"      \n";
+
        }
 
     
