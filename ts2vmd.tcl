@@ -168,7 +168,7 @@ proc load_tsi { file_in scaling convert_in } {
 	# read the different sections of a .tsi file
 	while {[gets $tsi line] > 0} {
 		if {[string match box* $line]} {
-			set ::box "[expr [lindex $line 1] * $convert_in] [expr [lindex $line 3] * $convert_in] [expr [lindex $line 3] * $convert_in]"
+			set ::box "[expr [lindex $line 1] * $convert_in] [expr [lindex $line 2] * $convert_in] [expr [lindex $line 3] * $convert_in]"
       		} elseif {[string match vertex* $line]} {
 			set ::nver "[lindex $line 1]"
 			while {[gets $tsi line] >= 0 } {
@@ -202,7 +202,7 @@ proc load_tsi { file_in scaling convert_in } {
 }
 
 
-proc load_q { file_in scaling } {
+proc load_q { file_in scaling convert_in } {
 
 	set q [open $file_in r]
 
@@ -212,7 +212,8 @@ proc load_q { file_in scaling } {
 
 	# read the different sections of a .tsi file
 	while {[gets $q line] > 0} {
-		if { $i == 0 } { set ::box "[expr [lindex $line 1] * $convert_in] [expr [lindex $line 3] * $convert_in] [expr [lindex $line 3] * $convert_in]"
+		if { $i == 0 } { 
+			set ::box "[expr [lindex $line 0] * $convert_in] [expr [lindex $line 1] * $convert_in] [expr [lindex $line 2] * $convert_in]"
 		} elseif { $i == 1 } {
 			set ::nver $line
 			set read_ver "true"
@@ -239,7 +240,7 @@ proc load_q { file_in scaling } {
 
 }
 
-proc load_xyz { file_in scaling } {
+proc load_xyz { file_in } {
 
 	mol new $file_in
 	mol delrep 0 top
