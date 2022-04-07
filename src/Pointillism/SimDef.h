@@ -25,7 +25,7 @@
 
 
 #define Libarmadillo Disabled
-#define EigenLib Disabled
+#define EigenLib Enabled
 #define NoLib Enabled
 #define TEST_MODE  Disabled
 #define RNGTYPE  UNIFROMTYPE0

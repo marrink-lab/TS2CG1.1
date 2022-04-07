@@ -133,7 +133,17 @@ Vec3D Box=(*pBox);
     Vec3D v2(dx2,dy2,dz2);
     m_Normal=v1*v2;
     m_AreaVector=m_Normal;
-    m_Area=m_Normal.norm();    
+    m_Area=m_Normal.norm();
+    
+    if(m_Area==0 || isnan(m_Area))
+    {
+        std::cout<<"error: triangle with "<< this->GetTriID()<<" id has a zero area \n";
+        std::cout<<"x1 "<<m_V1->GetVID()<<"  "<<x1<<"   "<<y1<<"   "<<z1<<"   \n";
+        std::cout<<"x2 "<<m_V2->GetVID()<<"  "<<x2<<"   "<<y2<<"   "<<z2<<"   \n";
+        std::cout<<"x3 "<<m_V3->GetVID()<<"  "<<x3<<"   "<<y3<<"   "<<z3<<"   \n";
+
+
+    }
     m_Normal=m_Normal*(1.0/m_Area);    
     m_Area=0.5*m_Area;
 

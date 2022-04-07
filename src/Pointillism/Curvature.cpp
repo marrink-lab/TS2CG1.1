@@ -15,6 +15,12 @@ Curvature::Curvature(vertex * pvertex)
     {
         Vec3D v=(*it)->GetNormalVector();
         double a=(*it)->GetArea();
+        if(isnan(a))
+        {
+            std::string sms=" WARNING: triangle has unkown area \n";
+            std::cout<<sms<<"\n";
+            std::cout<<a<<"\n";
+        }
         v=v*a;
         Normal=Normal+v;
         Area+=a;
@@ -35,9 +41,19 @@ Curvature::Curvature(vertex * pvertex)
 	std::string sms=" WARNING: vertex has a negetive area \n";
 	std::cout<<sms<<"\n";
     }
-
+    else if(isnan(Area))
+    {
+        std::string sms=" WARNING: vertex has unkown area \n";
+        std::cout<<sms<<"\n";
+        std::cout<<Area<<"\n";
+    }
 
     double no=Normal.norm();
+    if(no==0)
+    {
+        std::string sms=" WARNING: normal has zero size \n";
+        std::cout<<sms<<"\n";
+    }
     no=1.0/no;
     Normal=Normal*no;
     m_pVertex->UpdateNormal_Area(Normal,Area);
@@ -66,7 +82,15 @@ Curvature::Curvature(vertex * pvertex)
 	   {
         Vec3D ve=(*it)->GetNormal();
         double we=ve.dot(Normal,ve);
-        
+        if(isnan(we))
+        {
+            std::cout<<"error2288: this should not happen \n";
+            std::cout<<ve(0)<<"  "<<ve(1)<<"  "<<ve(2)<<"  \n";
+            std::cout<<Normal(0)<<"  "<<Normal(1)<<"  "<<Normal(2)<<"  \n";
+            std::cout<<no<<"  \n";
+            exit(0);
+
+        }
 
         Vec3D Be=(*it)->GetBe();
         double he=(*it)->GetHe();
@@ -96,10 +120,15 @@ Curvature::Curvature(vertex * pvertex)
         
         
 	}
+
+        
         
     }
 
-
+    /*  std::cout<<LSV(0,0)<<" "<<LSV(0,1)<<" "<<LSV(0,2)<<" "<<"\n";
+     std::cout<<LSV(1,0)<<" "<<LSV(1,1)<<" "<<LSV(1,2)<<" "<<"\n";
+     std::cout<<LSV(2,0)<<" "<<LSV(2,1)<<" "<<LSV(2,2)<<" "<<"\n";
+     std::cout<<"\n";*/
     ///=============
     //==== Find Curvature and local frame
     //=============
@@ -145,7 +174,12 @@ Curvature::Curvature(vertex * pvertex)
     {
         c1=0;
         c2=0;
-       // std::cout<<delta<<"  error: delta is negative, this means curvature cannot be found \n";
+        std::cout<<c<<"  "<<b<<"  "<<delta<<"  error: delta is negative, this means curvature cannot be found \n";
+        
+        /*std::cout<<SV(0,0)<<" "<<SV(0,1)<<" "<<SV(0,2)<<" "<<"\n";
+        std::cout<<SV(1,0)<<" "<<SV(1,1)<<" "<<SV(1,2)<<" "<<"\n";
+        std::cout<<SV(2,0)<<" "<<SV(2,1)<<" "<<SV(2,2)<<" "<<"\n";
+        std::cout<<"========== \n";*/
     }
 
    // if(true) in general we do not need this, only if we have directional inclsuions
@@ -309,6 +343,28 @@ Tensor2 Curvature::Householder(Vec3D N)
 {
     
     Tensor2 Hous;
+    bool t = false;
+    if(N(2)==-1)
+    {
+        N(1)=0.00000001;
+        N=N*(1/N.norm());
+        t=true;
+    }
+  /*  if(N(2)==-1)
+    {
+        Hous(0,0) = 1;
+        Hous(0,1) = 0;
+        Hous(0,2) = 0;
+        Hous(1,1) = 1;
+        Hous(1,0) = 0;
+        Hous(1,2) = 0;
+        Hous(2,2) = -1;
+        Hous(2,1) = 0;
+        Hous(2,0) = 0;
+        
+    }
+    else
+    {*/
     Vec3D Zk;
     Zk(2)=1.0;
     Zk=Zk+N;
@@ -317,6 +373,14 @@ Tensor2 Curvature::Householder(Vec3D N)
     Tensor2 I('I');
     Tensor2 W=Hous.makeTen(Zk);
     Hous=(I-W*2)*(-1);
+   // }
+    /*if(t==true)
+    {
+        Tensor2 LSV = Hous;
+        std::cout<<LSV(0,0)<<" "<<LSV(0,1)<<" "<<LSV(0,2)<<" "<<"\n";
+        std::cout<<LSV(1,0)<<" "<<LSV(1,1)<<" "<<LSV(1,2)<<" "<<"\n";
+        std::cout<<LSV(2,0)<<" "<<LSV(2,1)<<" "<<LSV(2,2)<<" "<<"\n";
+    }*/
     
     return Hous;
 

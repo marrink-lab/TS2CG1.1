@@ -84,7 +84,7 @@ Edit_configuration::Edit_configuration( std::vector <std::string> Arguments)
             help helpmessage(SoftWareVersion, Arguments.at(0));
             health = false;
         }
-        else if(Arguments.at(i)=="-bilayerThickness")
+        else if(Arguments.at(i)=="-bilayerThickness" || Arguments.at(i)=="-BilayerThickness")
         {
             bilyaerthickness=f.String_to_Double(Arguments.at(i+1));  //bilayer thickness
         }
@@ -746,7 +746,7 @@ if(layer==1)
         vertex* ver = (*it)->Getvertex();
         int verid=ver->GetVID();
         double R=(*it)->GetRadius();
-        fprintf(ExcFile,  "%5d%5d%8.3f\n",i,verid,R);
+        fprintf(ExcFile,  "%5d%10d%8.3f\n",i,verid,R);
         i++;
     }
     }

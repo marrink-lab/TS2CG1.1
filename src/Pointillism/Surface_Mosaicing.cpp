@@ -448,11 +448,14 @@ void Surface_Mosaicing::BestEstimateOfMidPointPossition(links *l, double *X, dou
 
 
     
-    
+
 
 
      Vec3D geodesic_dir(x2-x1,y2-y1,z2-z1);
 
+
+    
+    
      for (int i=0;i<3;i++)
      {
          if(fabs(geodesic_dir(i))>(*pBox)(i)/2)
@@ -463,10 +466,12 @@ void Surface_Mosaicing::BestEstimateOfMidPointPossition(links *l, double *X, dou
              geodesic_dir(i)=geodesic_dir(i)-(*pBox)(i);
          }
      }
-    
+
     double Linklenght= geodesic_dir.norm();
     geodesic_dir = geodesic_dir*(1/geodesic_dir.norm());
 
+
+    
      Vec3D Lo_geoV1=(pv1->GetG2LTransferMatrix())*geodesic_dir;
      Lo_geoV1(2)=0;
      Lo_geoV1=Lo_geoV1*(1/(Lo_geoV1.norm()));
@@ -483,6 +488,23 @@ void Surface_Mosaicing::BestEstimateOfMidPointPossition(links *l, double *X, dou
 
     Vec3D t_2=Hous*Glo_geoV2;
     Vec3D t_1=Hous*Glo_geoV1;
+#if TEST_MODE == Enabled
+    if(isnan(t_2(0)) || isnan(t_2(1)) || isnan(t_2(2)))
+    {
+        std::cout<<"errorGGGG.... "<<(geodesic_dir(0))<<"  "<<(geodesic_dir(1))<<"   "<<(geodesic_dir(2))<<"   \n";
+        
+        Tensor2 LSV = pv2->GetL2GTransferMatrix();
+          std::cout<<LSV(0,0)<<" "<<LSV(0,1)<<" "<<LSV(0,2)<<" "<<"\n";
+         std::cout<<LSV(1,0)<<" "<<LSV(1,1)<<" "<<LSV(1,2)<<" "<<"\n";
+         std::cout<<LSV(2,0)<<" "<<LSV(2,1)<<" "<<LSV(2,2)<<" "<<"\n";
+         std::cout<<"\n";
+        std::cout<<t_2(0)<<" "<<t_2(1)<<" "<<t_2(2)<<" "<<"\n";
+
+        exit(0);
+    }
+    if(t_2(2)==0||t_1(2))
+    std::cout<<"error---> 34523 \n";
+#endif
 
     t_2=t_2*(1/t_2(2));
     t_1=t_1*(1/t_1(2));
@@ -574,8 +596,18 @@ void Surface_Mosaicing::BestEstimateOfMidPointPossition(links *l, double *X, dou
     x=xmid+GDr(0);
     y=ymid+GDr(1);
     z=zmid+GDr(2);
+ #if TEST_MODE == Enabled
+    if(isnan(x) || isnan(y) || isnan(z))
+    {
+        std::cout<<"error5455.... "<<x<<"  "<<y<<"   "<<z<<"   \n";
+        std::cout<<"Xmid.... "<<xmid<<"  "<<ymid<<"   "<<zmid<<"   \n";
+        std::cout<<"Dr.... "<<Dr(0)<<"  "<<Dr(1)<<"   "<<Dr(2)<<"   \n";
+        std::cout<<"Link Lenght.... "<<Linklenght<<"   \n";
+        
+        exit(0);
+    }
+#endif
 
-    
     *X=x;
     *Y=y;
     *Z=z;
@@ -756,17 +788,38 @@ void Surface_Mosaicing::RoughnessOfALink(links *l, double *linklength, double *m
 }
 Tensor2 Surface_Mosaicing::NormalCoord(Vec3D N)
 {
-    
+
     Tensor2 Hous;
-    Vec3D Zk;
-    Zk(2)=1.0;
-    Zk=Zk+N;
-    Zk=Zk*(1.0/Zk.norm());
-    
-    Tensor2 I('I');
-    Tensor2 W=Hous.makeTen(Zk);
-    Hous=(I-W*2)*(-1);
-    
+    if(N(2)==-1)
+    {
+        N(1)=0.00000001;
+        N=N*(1/N.norm());
+        
+    }
+   /* if(N(2)==-1)
+    {
+        Hous(0,0) = 1;
+        Hous(0,1) = 0;
+        Hous(0,2) = 0;
+        Hous(1,1) = 1;
+        Hous(1,0) = 0;
+        Hous(1,2) = 0;
+        Hous(2,2) = -1;
+        Hous(2,1) = 0;
+        Hous(2,0) = 0;
+
+    }
+    else
+    {*/
+        Vec3D Zk;
+        Zk(2)=1.0;
+        Zk=Zk+N;
+        Zk=Zk*(1.0/Zk.norm());
+        
+        Tensor2 I('I');
+        Tensor2 W=Hous.makeTen(Zk);
+        Hous=(I-W*2)*(-1);
+    //}
     return Hous;
     
     
