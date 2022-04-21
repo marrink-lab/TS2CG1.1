@@ -107,7 +107,7 @@ void GroFile::ReadGroFile(std::string file)
         
     }
     
-    for (std::vector<bead>::iterator it = m_AllBeads.begin() ; it != m_AllBeads.end(); ++it)
+   /* for (std::vector<bead>::iterator it = m_AllBeads.begin() ; it != m_AllBeads.end(); ++it)
     {
         
         (*it).UpdateBox(m_pBox);
@@ -119,7 +119,7 @@ void GroFile::ReadGroFile(std::string file)
         (*it).UpdateZPos(z-zcm);
         
         
-    }
+    }*/
     
     
     for (std::vector<bead>::iterator it = m_AllBeads.begin() ; it != m_AllBeads.end(); ++it)
