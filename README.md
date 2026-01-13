@@ -9,4 +9,4 @@ to take electron microscopy tomography data and build structures for molecular d
 
 TS2CG is implemented in C++ and includes two separate scripts. Pointillism (PLM) and CG Membrane Builder (PCG).
 
-Note: There will be no further updates to this version. More develoments will be done on version 2 (https://github.com/weria-pezeshkian/TS2CG-v2.0)
+Note: There will be no further updates to this version. Check the version 2 with many new features (https://github.com/weria-pezeshkian/TS2CG-v2.0)
