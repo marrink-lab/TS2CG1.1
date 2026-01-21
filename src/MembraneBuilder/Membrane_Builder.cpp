@@ -440,7 +440,7 @@ void Membrane_Builder::WriteFinalGroFile()
         const char* A1=((*it).GetResName()).c_str();
         const char* A2=((*it).GetBeadName()).c_str();
         int resid=(*it).GetResid();
-        fprintf(fgro, "%5d%5s%5s%5d%8.3f%8.3f%8.3f\n",resid%100000,A1,A2,i%100000,x,y,z );
+        fprintf(fgro, "%5d%5.4s%5.4s%5d%8.3f%8.3f%8.3f\n",resid%100000,A1,A2,i%100000,x,y,z );
         
     }
     
